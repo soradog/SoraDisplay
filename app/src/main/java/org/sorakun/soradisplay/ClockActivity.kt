@@ -8,10 +8,13 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
+import android.widget.DigitalClock
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.sorakun.soradisplay.databinding.ActivityClockBinding
+import java.util.*
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -20,14 +23,22 @@ import org.sorakun.soradisplay.databinding.ActivityClockBinding
 class ClockActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClockBinding
-    private lateinit var fullscreenContent: TextView
+    private lateinit var fullscreenContent: SoraDigitalClock
     private lateinit var fullscreenContentControls: LinearLayout
+    private lateinit var dateDisplay: TextView
+
     private val hideHandler = Handler(Looper.myLooper()!!)
 
+    private val dayChangedBroadcastReceiver = object : DayChangedBroadcastReceiver() {
+
+        override fun onDayChanged(format: String) {
+            dateDisplay.text = format
+        }
+    }
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
-        /*if (Build.VERSION.SDK_INT >= 30) {
+        if (Build.VERSION.SDK_INT >= 30) {
             fullscreenContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
             // Note that some of these constants are new as of API 16 (Jelly Bean)
@@ -40,7 +51,7 @@ class ClockActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        }*/
+        }
     }
     private val showPart2Runnable = Runnable {
         // Delayed display of UI elements
@@ -80,8 +91,10 @@ class ClockActivity : AppCompatActivity() {
         isFullscreen = true
 
         // Set up the user interaction to manually show or hide the system UI.
-        //fullscreenContent = binding.fullscreenContent
+        fullscreenContent = binding.simpleDigitalClock
         //fullscreenContent.setOnClickListener { toggle() }
+
+        dateDisplay = binding.textDateDisplay
 
         //fullscreenContentControls = binding.fullscreenContentControls
 
@@ -90,9 +103,18 @@ class ClockActivity : AppCompatActivity() {
         // while interacting with the UI.
         //binding.dummyButton.setOnTouchListener(delayHideTouchListener)
 
-        val UI_OPTIONS =
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_VISIBLE
+        // Hide the OS status bar for Jellybean
+        //window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_VISIBLE
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.registerReceiver(dayChangedBroadcastReceiver, DayChangedBroadcastReceiver.getIntentFilter())
+
+
+        dateDisplay.text = dayChangedBroadcastReceiver.printDate(Date())
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
