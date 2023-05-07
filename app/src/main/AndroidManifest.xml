@@ -12,16 +12,20 @@
         android:theme="@style/Theme.SoraDisplay"
         tools:targetApi="31">
         <activity
-            android:name=".ClockActivity"
+            android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_fullscreen"
             android:theme="@style/Theme.SoraDisplay.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".DayChangedBroadcastReceiver" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

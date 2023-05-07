@@ -10,15 +10,15 @@ import java.util.*
 abstract class DayChangedBroadcastReceiver : BroadcastReceiver() {
 
     private var date = Date()
-    private val dateFormat by lazy { SimpleDateFormat("EE MMM dd", Locale.getDefault()) }
+    private val dateFormat by lazy { SimpleDateFormat("EE, MMM dd", Locale.getDefault()) }
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
 
         val currentDate = Date()
 
-        //if ((action == Intent.ACTION_TIME_CHANGED || action == Intent.ACTION_DATE_CHANGED || action == Intent.ACTION_TIMEZONE_CHANGED) && !isSameDay(currentDate)) {
-        if (action == Intent.ACTION_TIME_TICK) {
+        if ((action == Intent.ACTION_TIME_CHANGED || action == Intent.ACTION_DATE_CHANGED || action == Intent.ACTION_TIMEZONE_CHANGED) && !isSameDay(currentDate)) {
+        //if (action == Intent.ACTION_TIME_TICK) {
             onDayChanged(printDate(currentDate))
         }
     }

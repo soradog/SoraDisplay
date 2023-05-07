@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fullscreen_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
+    tools:context=".WeatherForecastFragment">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <org.sorakun.soradisplay.SoraDigitalClock
+            android:id="@+id/soraDigitalClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minEms="6"
+            android:textColor="@color/white"
+            android:textSize="60sp" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/weather_label_fetching"
+            android:textColor="@color/white"
+            android:textSize="60sp" />
+
+        <TextView
+            android:id="@+id/lastupdated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </TableRow>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/forecastdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecasttime7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/forecasticon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/forecasticon1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+            <ImageView
+                android:id="@+id/forecasticon2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+            <ImageView
+                android:id="@+id/forecasticon3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+            <ImageView
+                android:id="@+id/forecasticon4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+            <ImageView
+                android:id="@+id/forecasticon5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+            <ImageView
+                android:id="@+id/forecasticon6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+            <ImageView
+                android:id="@+id/forecasticon7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/weather_icon_description"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_thermostat_24" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/forecastlabel1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue1a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue2a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue3a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue4a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue5a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue6a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue7a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/forecastlabel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue1b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue2b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue3b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue4b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue5b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue6b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue7b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/forecastlabel3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue1c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue2c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue3c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue4c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue5c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue6c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue7c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/forecastlabel4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue1d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue2d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue3d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue4d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue5d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue6d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue7d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/forecastlabel5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue1e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue2e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue3e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue4e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue5e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue6e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/forecastvalue7e"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/weather_label_fetching"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

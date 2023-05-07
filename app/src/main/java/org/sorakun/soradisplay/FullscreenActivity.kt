@@ -8,11 +8,14 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
-import android.widget.DigitalClock
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import org.sorakun.soradisplay.databinding.ActivityClockBinding
+import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.Response
+import org.json.JSONException
+import org.json.JSONObject
+import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
+import org.sorakun.soradisplay.weatherapi.ForecastRecord
+import org.sorakun.soradisplay.weatherapi.GetForecastRunnable
 import java.util.*
 
 
@@ -20,21 +23,15 @@ import java.util.*
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class ClockActivity : AppCompatActivity() {
+class FullscreenActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityClockBinding
-    private lateinit var fullscreenContent: SoraDigitalClock
-    private lateinit var fullscreenContentControls: LinearLayout
-    private lateinit var dateDisplay: TextView
-
+    private lateinit var binding: ActivityFullscreenBinding
+    private lateinit var fullscreenContent: ViewPager2
+    private lateinit var fragmentAdapter: FragmentAdapter
+    //private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
+    private var currentPage:Int = 0
 
-    private val dayChangedBroadcastReceiver = object : DayChangedBroadcastReceiver() {
-
-        override fun onDayChanged(format: String) {
-            dateDisplay.text = format
-        }
-    }
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -56,11 +53,11 @@ class ClockActivity : AppCompatActivity() {
     private val showPart2Runnable = Runnable {
         // Delayed display of UI elements
         supportActionBar?.show()
-        fullscreenContentControls.visibility = View.VISIBLE
+        //fullscreenContentControls.visibility = View.VISIBLE
     }
     private var isFullscreen: Boolean = false
-
     private val hideRunnable = Runnable { hide() }
+    private lateinit var forecastRunnable : GetForecastRunnable
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -83,7 +80,7 @@ class ClockActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityClockBinding.inflate(layoutInflater)
+        binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -91,10 +88,16 @@ class ClockActivity : AppCompatActivity() {
         isFullscreen = true
 
         // Set up the user interaction to manually show or hide the system UI.
-        fullscreenContent = binding.simpleDigitalClock
-        //fullscreenContent.setOnClickListener { toggle() }
+        fullscreenContent = binding.fullscreenContent
+        fullscreenContent.setOnClickListener { toggle() }
 
-        dateDisplay = binding.textDateDisplay
+        fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
+        fragmentAdapter.addFragment(ClockFragment());
+        fragmentAdapter.addFragment(TodayWeatherFragment());
+        fragmentAdapter.addFragment(WeatherForecastFragment());
+
+        fullscreenContent.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        fullscreenContent.adapter = fragmentAdapter
 
         //fullscreenContentControls = binding.fullscreenContentControls
 
@@ -103,18 +106,27 @@ class ClockActivity : AppCompatActivity() {
         // while interacting with the UI.
         //binding.dummyButton.setOnTouchListener(delayHideTouchListener)
 
-        // Hide the OS status bar for Jellybean
-        //window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_VISIBLE
+        // Schedule a timer event to auto flip through the different viewpages
+        val handler = Handler()
+        val update = Runnable {
+            if (currentPage == fragmentAdapter.itemCount) {
+                currentPage = 0
+            }
 
-    }
+            //Move to the next page. The second parameter ensures smooth scrolling
+            fullscreenContent.setCurrentItem(currentPage++, true)
+        }
 
-    override fun onResume() {
-        super.onResume()
-        this.registerReceiver(dayChangedBroadcastReceiver, DayChangedBroadcastReceiver.getIntentFilter())
+        // repeat the page flipping on a timer
+        Timer().schedule(object : TimerTask() {
+            // task to be scheduled
+            override fun run() {
+                handler.post(update)
+            }
+        }, 15000, 15000)
 
-
-        dateDisplay.text = dayChangedBroadcastReceiver.printDate(Date())
-
+        forecastRunnable = GetForecastRunnable(this)
+        forecastRunnable.firstRun();
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
