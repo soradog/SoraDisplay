@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay
+package org.sorakun.soradisplay.natureremo
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,7 +10,7 @@ import java.util.*
 abstract class DayChangedBroadcastReceiver : BroadcastReceiver() {
 
     private var date = Date()
-    private val dateFormat by lazy { SimpleDateFormat("EE, MMM dd", Locale.getDefault()) }
+    private val dateFormat by lazy { SimpleDateFormat("MMM dd (EE)", Locale.getDefault()) }
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action

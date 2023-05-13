@@ -6,6 +6,9 @@ import org.sorakun.soradisplay.databinding.FragmentClockBinding;
 
 import java.util.Locale;
 
+import static org.sorakun.soradisplay.Util.getHumidityColor;
+import static org.sorakun.soradisplay.Util.getTemperatureColor;
+
 public class DeviceRecord {
     private String name;
     private Double temperature;
@@ -24,9 +27,11 @@ public class DeviceRecord {
         binding.sensorTemperature.setText(String.format(
                 Locale.getDefault(),
                 "%d°c", getTemperature().intValue()));
+        binding.sensorTemperature.setTextColor(getTemperatureColor(getTemperature()));
         binding.sensorHumidity.setText(String.format(
                 Locale.getDefault(),
                 "%d%%", getHumidity().intValue()));
+        binding.sensorHumidity.setTextColor(getHumidityColor(getHumidity()));
         binding.remoLocation.setText(name);
     }
 

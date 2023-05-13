@@ -8,7 +8,7 @@
     android:background="@color/black"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
-    tools:context=".ClockFragment">
+    tools:context=".natureremo.ClockFragment">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -56,7 +56,7 @@
 
     </LinearLayout>
 
-    <org.sorakun.soradisplay.SoraDigitalClock
+    <org.sorakun.soradisplay.natureremo.SoraDigitalClock
         android:id="@+id/simpleDigitalClock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

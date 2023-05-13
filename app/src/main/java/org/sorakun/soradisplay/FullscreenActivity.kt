@@ -10,12 +10,14 @@ import android.view.View
 import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.android.volley.Response
 import org.json.JSONException
 import org.json.JSONObject
 import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
+import org.sorakun.soradisplay.natureremo.ClockFragment
 import org.sorakun.soradisplay.weatherapi.ForecastRecord
 import org.sorakun.soradisplay.weatherapi.GetForecastRunnable
+import org.sorakun.soradisplay.weatherapi.TodayWeatherFragment
+import org.sorakun.soradisplay.weatherapi.WeatherForecastFragment
 import java.util.*
 
 
@@ -28,6 +30,10 @@ class FullscreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFullscreenBinding
     private lateinit var fullscreenContent: ViewPager2
     private lateinit var fragmentAdapter: FragmentAdapter
+    private lateinit var forecastRecord : ForecastRecord
+    private var todayWeather = TodayWeatherFragment()
+    private var weeklyWeather = WeatherForecastFragment()
+
     //private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
     private var currentPage:Int = 0
@@ -93,10 +99,10 @@ class FullscreenActivity : AppCompatActivity() {
 
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
         fragmentAdapter.addFragment(ClockFragment());
-        fragmentAdapter.addFragment(TodayWeatherFragment());
-        fragmentAdapter.addFragment(WeatherForecastFragment());
+        fragmentAdapter.addFragment(todayWeather);
+        fragmentAdapter.addFragment(weeklyWeather);
 
-        fullscreenContent.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
         fullscreenContent.adapter = fragmentAdapter
 
         //fullscreenContentControls = binding.fullscreenContentControls
@@ -114,7 +120,7 @@ class FullscreenActivity : AppCompatActivity() {
             }
 
             //Move to the next page. The second parameter ensures smooth scrolling
-            fullscreenContent.setCurrentItem(currentPage++, true)
+            fullscreenContent.setCurrentItem(currentPage++, false)
         }
 
         // repeat the page flipping on a timer
@@ -127,6 +133,16 @@ class FullscreenActivity : AppCompatActivity() {
 
         forecastRunnable = GetForecastRunnable(this)
         forecastRunnable.firstRun();
+    }
+
+    fun onResponse(response: JSONObject?) {
+        try {
+            forecastRecord = ForecastRecord(response)
+            todayWeather.onChanged(forecastRecord)
+            weeklyWeather.onChanged(forecastRecord)
+        } catch (e: JSONException) {
+            throw RuntimeException(e)
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

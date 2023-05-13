@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay
+package org.sorakun.soradisplay.weatherapi
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,15 +9,18 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.sorakun.soradisplay.databinding.FragmentTodayWeatherBinding
-import org.sorakun.soradisplay.weatherapi.ForecastRecord
 
 /**
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-open class TodayWeatherFragment : Fragment() {
+open class TodayWeatherFragment : Fragment(), Observer<ForecastRecord> {
     private val hideHandler = Handler(Looper.myLooper()!!)
+    private val forecastAdapter = IntraDayForecastAdapter()
+    private lateinit var forecastRecord : ForecastRecord
 
     @Suppress("InlinedApi")
     private val hidePart2Runnable = Runnable {
@@ -68,6 +71,8 @@ open class TodayWeatherFragment : Fragment() {
     ): View? {
 
         _binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerView.adapter = forecastAdapter
         return binding.root
 
     }
@@ -81,8 +86,8 @@ open class TodayWeatherFragment : Fragment() {
         // Set up the user interaction to manually show or hide the system UI.
         fullscreenContent?.setOnClickListener { toggle() }
 
-        if (ForecastRecord.Instance != null) {
-            ForecastRecord.Instance.updateTodayViews(binding)
+        if (forecastRecord != null) {
+            forecastRecord.updateTodayViews(binding)
         }
     }
 
@@ -95,8 +100,10 @@ open class TodayWeatherFragment : Fragment() {
         // are available.
         delayedHide(100)
 
-        if (ForecastRecord.Instance != null) {
-            ForecastRecord.Instance.updateTodayViews(binding)
+        binding.recyclerView.adapter = forecastAdapter
+
+        if (forecastRecord != null) {
+            forecastRecord.updateTodayViews(binding)
         }
     }
 
@@ -175,5 +182,13 @@ open class TodayWeatherFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onChanged(t: ForecastRecord?) {
+        if (t != null) {
+            forecastRecord = t
+            val hours = forecastRecord.forecastedHours
+            forecastAdapter.submitList(hours)
+        }
     }
 }

@@ -5,12 +5,17 @@
     <string name="weather_now_label">Now</string>
     <string name="weather_icon_description">Weather Icon</string>
     <string name="weather_label_fetching">Fetching...</string>
-    <string name="weather_min_temp_label">Min:</string>
-    <string name="weather_humidity_label">Humidity:</string>
+    <string name="weather_min_temp_label">Min°c</string>
+    <string name="weather_max_temp_label">Max°c</string>
+    <string name="weather_humidity_label">Humid%</string>
     <string name="weather_precip_label">Precip:</string>
-    <string name="weather_windspeed_label">Wind:</string>
+    <string name="weather_windspeed_label">Wind</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_clock">ClockActivity</string>
     <string name="title_activity_fullscreen_temperature">FullscreenTemperature</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="generic_blank_string">    </string>
+    <string name="generic_degree_celsius">°c</string>
+    <string name="generic_rain_label">Rain</string>
+
 </resources>

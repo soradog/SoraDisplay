@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".DayChangedBroadcastReceiver" />
+        <receiver android:name=".natureremo.DayChangedBroadcastReceiver" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

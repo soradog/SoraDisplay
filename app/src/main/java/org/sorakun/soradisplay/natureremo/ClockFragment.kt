@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay
+package org.sorakun.soradisplay.natureremo
 
 import android.os.Bundle
 import android.os.Handler
@@ -7,18 +7,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import org.sorakun.soradisplay.databinding.FragmentWeatherForecastBinding
-import org.sorakun.soradisplay.weatherapi.ForecastRecord
+import com.android.volley.Response
+import org.json.JSONArray
+import org.sorakun.soradisplay.databinding.FragmentClockBinding
+import java.util.*
 
 /**
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class WeatherForecastFragment : Fragment() {
+class ClockFragment : Fragment(), Response.Listener<JSONArray> {
+
     private val hideHandler = Handler(Looper.myLooper()!!)
+    //private val remoServiceHandler = DevicesRequestRunnable(this.context)
+
+    private val dayChangedBroadcastReceiver = object : DayChangedBroadcastReceiver() {
+
+        override fun onDayChanged(format: String) {
+            dateDisplay.text = format
+        }
+    }
 
     @Suppress("InlinedApi")
     private val hidePart2Runnable = Runnable {
@@ -37,12 +48,10 @@ class WeatherForecastFragment : Fragment() {
         activity?.window?.decorView?.systemUiVisibility = flags
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
     }
-    private val showPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        //fullscreenContentControls?.visibility = View.VISIBLE
-    }
+
     private var visible: Boolean = false
     private val hideRunnable = Runnable { hide() }
+    private lateinit var natureRemoService : DevicesRequestRunnable
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -57,8 +66,11 @@ class WeatherForecastFragment : Fragment() {
     }
 
     private var fullscreenContent: View? = null
+    private lateinit var dateDisplay: TextView
+    private lateinit var tempDisplay: TextView
+    private lateinit var humidDisplay: TextView
 
-    private var _binding: FragmentWeatherForecastBinding? = null
+    private var _binding: FragmentClockBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -70,9 +82,8 @@ class WeatherForecastFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentWeatherForecastBinding.inflate(inflater, container, false)
+        _binding = FragmentClockBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,32 +91,35 @@ class WeatherForecastFragment : Fragment() {
 
         visible = true
 
-        fullscreenContent = binding.fullscreenContent
-        // Set up the user interaction to manually show or hide the system UI.
-        fullscreenContent?.setOnClickListener { toggle() }
+        fullscreenContent = binding.simpleDigitalClock
+        dateDisplay = binding.textDateDisplay
+        tempDisplay = binding.sensorTemperature
+        humidDisplay = binding.sensorHumidity
 
-        if (ForecastRecord.Instance != null) {
-            ForecastRecord.Instance.updateFutureViews(binding)
-        }
+        natureRemoService = DevicesRequestRunnable(this)
+        natureRemoService.firstRun();
     }
 
     override fun onResume() {
         super.onResume()
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
+        activity?.registerReceiver(dayChangedBroadcastReceiver,
+            DayChangedBroadcastReceiver.getIntentFilter()
+        )
+        dateDisplay.text = dayChangedBroadcastReceiver.printDate(Date())
+
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
-
-        if (ForecastRecord.Instance != null) {
-            ForecastRecord.Instance.updateFutureViews(binding)
-        }
     }
 
     override fun onPause() {
         super.onPause()
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+        activity?.unregisterReceiver(dayChangedBroadcastReceiver)
 
         // Clear the systemUiVisibility flag
         activity?.window?.decorView?.systemUiVisibility = 0
@@ -130,7 +144,6 @@ class WeatherForecastFragment : Fragment() {
         visible = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
-        hideHandler.removeCallbacks(showPart2Runnable)
         hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
@@ -144,7 +157,6 @@ class WeatherForecastFragment : Fragment() {
 
         // Schedule a runnable to display UI elements after a delay
         hideHandler.removeCallbacks(hidePart2Runnable)
-        hideHandler.postDelayed(showPart2Runnable, UI_ANIMATION_DELAY.toLong())
         (activity as? AppCompatActivity)?.supportActionBar?.show()
     }
 
@@ -180,5 +192,14 @@ class WeatherForecastFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResponse(response: JSONArray?) {
+        if (response != null) {
+            for (i in 0 until response.length()) {
+                var device = DeviceRecord(response?.getJSONObject(i))
+                device.updateViews(binding)
+            }
+        }
     }
 }

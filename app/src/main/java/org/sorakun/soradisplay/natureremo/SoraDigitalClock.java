@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay;
+package org.sorakun.soradisplay.natureremo;
 
 import android.content.Context;
 import android.database.ContentObserver;
