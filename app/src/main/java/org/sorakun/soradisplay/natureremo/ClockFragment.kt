@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.android.volley.Response
 import org.json.JSONArray
+import org.sorakun.soradisplay.SystemBroadcastReceiver
 import org.sorakun.soradisplay.databinding.FragmentClockBinding
 import java.util.*
 
@@ -24,7 +25,7 @@ class ClockFragment : Fragment(), Response.Listener<JSONArray> {
     private val hideHandler = Handler(Looper.myLooper()!!)
     //private val remoServiceHandler = DevicesRequestRunnable(this.context)
 
-    private val dayChangedBroadcastReceiver = object : DayChangedBroadcastReceiver() {
+    private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
 
         override fun onDayChanged(format: String) {
             dateDisplay.text = format
@@ -97,17 +98,17 @@ class ClockFragment : Fragment(), Response.Listener<JSONArray> {
         humidDisplay = binding.sensorHumidity
 
         natureRemoService = DevicesRequestRunnable(this)
-        natureRemoService.firstRun();
+        natureRemoService.firstRun()
     }
 
     override fun onResume() {
         super.onResume()
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-        activity?.registerReceiver(dayChangedBroadcastReceiver,
-            DayChangedBroadcastReceiver.getIntentFilter()
+        activity?.registerReceiver(systemBroadcastReceiver,
+            SystemBroadcastReceiver.getIntentFilter()
         )
-        dateDisplay.text = dayChangedBroadcastReceiver.printDate(Date())
+        dateDisplay.text = systemBroadcastReceiver.printDate(Date())
 
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
@@ -119,7 +120,7 @@ class ClockFragment : Fragment(), Response.Listener<JSONArray> {
         super.onPause()
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-        activity?.unregisterReceiver(dayChangedBroadcastReceiver)
+        activity?.unregisterReceiver(systemBroadcastReceiver)
 
         // Clear the systemUiVisibility flag
         activity?.window?.decorView?.systemUiVisibility = 0
@@ -197,7 +198,7 @@ class ClockFragment : Fragment(), Response.Listener<JSONArray> {
     override fun onResponse(response: JSONArray?) {
         if (response != null) {
             for (i in 0 until response.length()) {
-                var device = DeviceRecord(response?.getJSONObject(i))
+                val device = DeviceRecord(response.getJSONObject(i))
                 device.updateViews(binding)
             }
         }

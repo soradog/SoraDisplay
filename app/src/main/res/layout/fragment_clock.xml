@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear"
     android:layout_width="match_parent"
@@ -13,14 +12,6 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <TextView
-        android:id="@+id/remoLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,11 +47,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/remoLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
     <org.sorakun.soradisplay.natureremo.SoraDigitalClock
         android:id="@+id/simpleDigitalClock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:keepScreenOn="true"
         android:textColor="#fff"
         android:textSize="440sp"
         android:textStyle="bold" />

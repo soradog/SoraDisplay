@@ -1,13 +1,13 @@
 package org.sorakun.soradisplay
 
 import android.annotation.SuppressLint
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.*
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import org.json.JSONException
@@ -37,6 +37,18 @@ class FullscreenActivity : AppCompatActivity() {
     //private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
     private var currentPage:Int = 0
+
+    private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
+
+        override fun onChargeStateChanged(charging: Boolean) {
+            if (charging) {
+                // prevent screen going to sleep if device is being charged
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+        }
+    }
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
@@ -98,9 +110,9 @@ class FullscreenActivity : AppCompatActivity() {
         fullscreenContent.setOnClickListener { toggle() }
 
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
-        fragmentAdapter.addFragment(ClockFragment());
-        fragmentAdapter.addFragment(todayWeather);
-        fragmentAdapter.addFragment(weeklyWeather);
+        fragmentAdapter.addFragment(ClockFragment())
+        fragmentAdapter.addFragment(todayWeather)
+        fragmentAdapter.addFragment(weeklyWeather)
 
         fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
         fullscreenContent.adapter = fragmentAdapter
@@ -132,7 +144,17 @@ class FullscreenActivity : AppCompatActivity() {
         }, 15000, 15000)
 
         forecastRunnable = GetForecastRunnable(this)
-        forecastRunnable.firstRun();
+        forecastRunnable.firstRun()
+
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+            registerReceiver(systemBroadcastReceiver, ifilter)
+        }
+        val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+        if (isCharging) {
+            // prevent screen going to sleep if device is charging
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
     }
 
     fun onResponse(response: JSONObject?) {

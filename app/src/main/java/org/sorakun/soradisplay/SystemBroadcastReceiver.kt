@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay.natureremo
+package org.sorakun.soradisplay
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,7 +7,7 @@ import android.content.IntentFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
-abstract class DayChangedBroadcastReceiver : BroadcastReceiver() {
+abstract class SystemBroadcastReceiver : BroadcastReceiver() {
 
     private var date = Date()
     private val dateFormat by lazy { SimpleDateFormat("MMM dd (EE)", Locale.getDefault()) }
@@ -20,6 +20,10 @@ abstract class DayChangedBroadcastReceiver : BroadcastReceiver() {
         if ((action == Intent.ACTION_TIME_CHANGED || action == Intent.ACTION_DATE_CHANGED || action == Intent.ACTION_TIMEZONE_CHANGED) && !isSameDay(currentDate)) {
         //if (action == Intent.ACTION_TIME_TICK) {
             onDayChanged(printDate(currentDate))
+        } else if (action == Intent.ACTION_POWER_DISCONNECTED) {
+            onChargeStateChanged(false)
+        } else if (action == Intent.ACTION_POWER_CONNECTED) {
+            onChargeStateChanged(true)
         }
     }
 
@@ -30,12 +34,22 @@ abstract class DayChangedBroadcastReceiver : BroadcastReceiver() {
         return dateFormat.format(toBeDisplayed)
     }
 
-    abstract fun onDayChanged(format: String)
+    /**
+     * function to call when the date has changed
+     */
+    open fun onDayChanged(format: String) {
+    }
+
+    /**
+     * function to call when the charging state has changed
+     */
+    open fun onChargeStateChanged(charging : Boolean) {
+    }
 
     companion object {
 
         /**
-         * Create the [IntentFilter] for the [DayChangedBroadcastReceiver].
+         * Create the [IntentFilter] for the [SystemBroadcastReceiver].
          *
          * @return The [IntentFilter]
          */
@@ -44,6 +58,8 @@ abstract class DayChangedBroadcastReceiver : BroadcastReceiver() {
             addAction(Intent.ACTION_TIMEZONE_CHANGED)
             addAction(Intent.ACTION_TIME_CHANGED)
             addAction(Intent.ACTION_DATE_CHANGED)
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_POWER_DISCONNECTED)
         }
     }
 }
