@@ -6,6 +6,8 @@ import org.sorakun.soradisplay.databinding.FragmentClockBinding;
 
 import java.util.Locale;
 
+import androidx.lifecycle.ViewModel;
+
 import static org.sorakun.soradisplay.Util.getHumidityColor;
 import static org.sorakun.soradisplay.Util.getTemperatureColor;
 
@@ -15,7 +17,8 @@ public class DeviceRecord {
     private Double humidity;
     private Double brightness;
 
-    public DeviceRecord(JSONObject object) throws JSONException {
+    public DeviceRecord() {}
+    public void update(JSONObject object) throws JSONException {
         JSONObject newestEvents = object.getJSONObject("newest_events");
         setTemperature(newestEvents.getJSONObject("te"));
         setHumidity(newestEvents.getJSONObject("hu"));
@@ -23,17 +26,10 @@ public class DeviceRecord {
         name = object.getString("name");
     }
 
-    public void updateViews(FragmentClockBinding binding) {
-        binding.sensorTemperature.setText(String.format(
-                Locale.getDefault(),
-                "%d°c", getTemperature().intValue()));
-        binding.sensorTemperature.setTextColor(getTemperatureColor(getTemperature()));
-        binding.sensorHumidity.setText(String.format(
-                Locale.getDefault(),
-                "%d%%", getHumidity().intValue()));
-        binding.sensorHumidity.setTextColor(getHumidityColor(getHumidity()));
-        binding.remoLocation.setText(name);
+    public Boolean isReady() {
+        return temperature != null;
     }
+    public String getName() { return name; }
 
     private void setBrightness(JSONObject object) throws JSONException {
         brightness = object.getDouble("val");
@@ -59,3 +55,4 @@ public class DeviceRecord {
         return temperature;
     }
 }
+

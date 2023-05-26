@@ -19,7 +19,7 @@ import java.util.Calendar;
  * FIXME: implement separate views for hours/minutes/seconds, so
  * proportional fonts don't shake rendering
  */
-public class SoraDigitalClock extends TextView {
+public class SoraDigitalClock extends androidx.appcompat.widget.AppCompatTextView {
     Calendar mCalendar;
     private final static String m12 = "h:mm aa";
     private final static String m24 = "k:mm";
@@ -75,7 +75,7 @@ public class SoraDigitalClock extends TextView {
      * Pulls 12/24 mode from system settings
      */
     private boolean get24HourMode() {
-        return android.text.format.DateFormat.is24HourFormat(getContext());
+        return true; // force 24 hour mode , for layout purposes android.text.format.DateFormat.is24HourFormat(getContext());
     }
     private void setFormat() {
         if (get24HourMode()) {

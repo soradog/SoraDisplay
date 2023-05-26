@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    android:paddingLeft="20sp"
-    android:paddingRight="20sp">
+    android:padding="20sp">
 
         <TextView
             android:id="@+id/weather_column_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:lines="1"
@@ -21,20 +20,10 @@
             android:textColor="@color/gray_600"
             android:textSize="40sp" />
 
-        <ImageView
-            android:id="@+id/weather_column_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/weather_icon_description"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
-            android:scaleType="fitCenter" />
-
         <TextView
             android:id="@+id/weather_column_valueA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:paddingLeft="20sp"
@@ -43,10 +32,20 @@
             android:textColor="@color/white"
             android:textSize="40sp" />
 
+        <ImageView
+            android:id="@+id/weather_column_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="@string/weather_icon_description"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"
+            android:scaleType="fitCenter" />
+
         <TextView
             android:id="@+id/weather_column_valueB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:paddingLeft="20sp"

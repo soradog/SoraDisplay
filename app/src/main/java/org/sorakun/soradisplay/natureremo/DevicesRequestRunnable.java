@@ -1,5 +1,6 @@
 package org.sorakun.soradisplay.natureremo;
 
+import android.app.Activity;
 import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,6 +11,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sorakun.soradisplay.FullscreenActivity;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -22,13 +24,13 @@ import androidx.fragment.app.Fragment;
 public class DevicesRequestRunnable
         implements Runnable, Response.ErrorListener {
 
-    private final Fragment fragment;
+    private final FullscreenActivity activity;
     private final Handler handler;
 
     private final static int repeatMinutes = 5;
 
-    public DevicesRequestRunnable(Fragment f) {
-        fragment = f;
+    public DevicesRequestRunnable(FullscreenActivity f) {
+        activity = f;
         handler = new Handler();
     }
 
@@ -45,29 +47,26 @@ public class DevicesRequestRunnable
     }
 
     private void sendRequest() {
-        Response.Listener<JSONArray> listener = (Response.Listener<JSONArray>)fragment;
-        if (listener != null) {
 
-            String url = "https://api.nature.global/1/devices";
+        String url = "https://api.nature.global/1/devices";
 
-            //creating json request for the NatureRemo sensor
-            JsonArrayRequest request = new JsonArrayRequest(
-                    Request.Method.GET,
-                    url,
-                    null,
-                    listener,
-                    this
-            ) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("Authorization", "Bearer VO-oNV-ZqrpaVXHXny3hO6vWgcR7wY7a4jQseo82EpE.f0M8KiqPvKSjv8EJL3KXIyf4MnurGdZDnq0naJmlg8M");
-                    return params;
-                }
-            };
-            RequestQueue queue = Volley.newRequestQueue(fragment.getContext());
-            queue.add(request);
-        }
+        //creating json request for the NatureRemo sensor
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                activity::onResponseJSONArray,
+                this
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer VO-oNV-ZqrpaVXHXny3hO6vWgcR7wY7a4jQseo82EpE.f0M8KiqPvKSjv8EJL3KXIyf4MnurGdZDnq0naJmlg8M");
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(activity);
+        queue.add(request);
     }
 
     @Override

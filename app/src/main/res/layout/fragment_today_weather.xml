@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fullscreen_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
+    android:padding="20sp"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
     tools:context=".weatherapi.TodayWeatherFragment">
 
@@ -37,18 +37,17 @@
         <TextView
             android:id="@+id/lastupdated"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="wrap_content" />
 
     </TableRow>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -66,7 +65,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -90,89 +89,83 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TableLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="end"
             android:orientation="vertical"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp">
+            android:padding="20sp">
 
-            <TextView
-                android:id="@+id/label1"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="40sp"
-                android:text="@string/weather_label_fetching"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="50sp" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/label2"
+                <TextView
+                    android:id="@+id/label1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20sp"
+                    android:text="@string/weather_label_fetching"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/value1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20sp"
+                    android:text="TextView"
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="40sp"
-                android:text="@string/weather_min_temp_label"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="50sp" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/label3"
+                <TextView
+                    android:id="@+id/label2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20sp"
+                    android:text="@string/weather_min_temp_label"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/value2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20sp"
+                    android:text="TextView"
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="40sp"
-                android:text="@string/weather_humidity_label"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="50sp" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/label4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="40sp"
-                android:text="@string/weather_precip_label"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="50sp" />
+                <TextView
+                    android:id="@+id/label3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20sp"
+                    android:text="@string/weather_humidity_label"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="40sp" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/value3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20sp"
+                    android:text="TextView"
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+            </TableRow>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/value1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/white"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/value2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/white"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/value3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/white"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/value4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/white"
-                android:textSize="50sp" />
-
-        </LinearLayout>
+        </TableLayout>
 
     </LinearLayout>
 
@@ -180,53 +173,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:padding="20sp"
         android:paddingTop="40sp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Space
-                android:id="@+id/tablelabel1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minHeight="120sp"
-                android:paddingLeft="20sp"
-                android:paddingRight="20sp" />
-
-            <Space
-                android:id="@+id/tablelabel2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minHeight="40sp"
-                android:paddingLeft="20sp"
-                android:paddingRight="20sp" />
-
-            <TextView
-                android:id="@+id/hourlyTempLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="20sp"
-                android:paddingRight="20sp"
-                android:text="@string/generic_degree_celsius"
-                android:textColor="@color/gray_600"
-                android:textSize="40sp" />
-
-            <TextView
-                android:id="@+id/hourlyRainLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="20sp"
-                android:paddingRight="20sp"
-                android:text="@string/generic_rain_label"
-                android:textColor="@color/gray_600"
-                android:textSize="40sp" />
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

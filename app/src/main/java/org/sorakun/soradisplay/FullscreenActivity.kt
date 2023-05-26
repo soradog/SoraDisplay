@@ -8,16 +8,18 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.viewpager2.widget.ViewPager2
-import org.json.JSONException
+import androidx.work.*
+import org.json.JSONArray
 import org.json.JSONObject
 import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
-import org.sorakun.soradisplay.natureremo.ClockFragment
-import org.sorakun.soradisplay.weatherapi.ForecastRecord
-import org.sorakun.soradisplay.weatherapi.GetForecastRunnable
-import org.sorakun.soradisplay.weatherapi.TodayWeatherFragment
-import org.sorakun.soradisplay.weatherapi.WeatherForecastFragment
+import org.sorakun.soradisplay.natureremo.*
+import org.sorakun.soradisplay.weatherapi.*
 import java.util.*
 
 
@@ -27,26 +29,36 @@ import java.util.*
  */
 class FullscreenActivity : AppCompatActivity() {
 
+    class PageCountViewModel : ViewModel() {
+        private val uiState: MutableLiveData<Int?> = MutableLiveData<Int?>()
+
+        init {
+            uiState.value = 0
+        }
+
+        fun getNextPage(max : Int) : Int {
+            val current : Int = uiState.value!!
+            val result = if (current >= max) {
+                0
+            } else {
+                current + 1
+            }
+            uiState.value = result
+            return result
+        }
+    }
+
     private lateinit var binding: ActivityFullscreenBinding
     private lateinit var fullscreenContent: ViewPager2
     private lateinit var fragmentAdapter: FragmentAdapter
-    private lateinit var forecastRecord : ForecastRecord
-    private var todayWeather = TodayWeatherFragment()
-    private var weeklyWeather = WeatherForecastFragment()
 
     //private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
-    private var currentPage:Int = 0
 
     private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
 
-        override fun onChargeStateChanged(charging: Boolean) {
-            if (charging) {
-                // prevent screen going to sleep if device is being charged
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            } else {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
+        override fun onDockOrBatteryStateChanged(isChargingOrDocked : Boolean) {
+            disableScreenSleep (isChargingOrDocked)
         }
     }
 
@@ -76,6 +88,7 @@ class FullscreenActivity : AppCompatActivity() {
     private var isFullscreen: Boolean = false
     private val hideRunnable = Runnable { hide() }
     private lateinit var forecastRunnable : GetForecastRunnable
+    private lateinit var devicesRunnable : DevicesRequestRunnable
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -111,8 +124,8 @@ class FullscreenActivity : AppCompatActivity() {
 
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
         fragmentAdapter.addFragment(ClockFragment())
-        fragmentAdapter.addFragment(todayWeather)
-        fragmentAdapter.addFragment(weeklyWeather)
+        fragmentAdapter.addFragment(TodayWeatherFragment())
+        fragmentAdapter.addFragment(WeatherForecastFragment())
 
         fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
         fullscreenContent.adapter = fragmentAdapter
@@ -126,44 +139,58 @@ class FullscreenActivity : AppCompatActivity() {
 
         // Schedule a timer event to auto flip through the different viewpages
         val handler = Handler()
-        val update = Runnable {
-            if (currentPage == fragmentAdapter.itemCount) {
-                currentPage = 0
-            }
+        val flipPagerRunnable = Runnable {
 
-            //Move to the next page. The second parameter ensures smooth scrolling
-            fullscreenContent.setCurrentItem(currentPage++, false)
+            val viewModel by viewModels<PageCountViewModel>()
+            val nextPage = viewModel.getNextPage(fragmentAdapter.itemCount - 1)
+            fullscreenContent.setCurrentItem(nextPage, false)
         }
 
         // repeat the page flipping on a timer
         Timer().schedule(object : TimerTask() {
             // task to be scheduled
             override fun run() {
-                handler.post(update)
+                handler.post(flipPagerRunnable)
             }
-        }, 15000, 15000)
+        }, 20000, 20000)
 
         forecastRunnable = GetForecastRunnable(this)
         forecastRunnable.firstRun()
+
+        devicesRunnable = DevicesRequestRunnable(this)
+        devicesRunnable.firstRun()
 
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
             registerReceiver(systemBroadcastReceiver, ifilter)
         }
         val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
-        if (isCharging) {
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL
+        disableScreenSleep (isCharging)
+    }
+
+    private fun disableScreenSleep(chargingOrDocking : Boolean) {
+        if (chargingOrDocking) {
             // prevent screen going to sleep if device is charging
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            val toast = Toast.makeText(this, "Device is docked/charging. Screen sleep has been disabled.", Toast.LENGTH_SHORT)
+            toast.show()
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            val toast = Toast.makeText(this, "Device is not charging/undocked. Screen sleep has been enabled.", Toast.LENGTH_SHORT)
+            toast.show()
         }
     }
 
-    fun onResponse(response: JSONObject?) {
-        try {
-            forecastRecord = ForecastRecord(response)
-            todayWeather.onChanged(forecastRecord)
-            weeklyWeather.onChanged(forecastRecord)
-        } catch (e: JSONException) {
-            throw RuntimeException(e)
+    fun onResponseJSONObject(response: JSONObject?) {
+        val viewModel by viewModels<ForecastRecordViewModel>()
+        viewModel.set(response)
+    }
+
+    fun onResponseJSONArray(response: JSONArray?) {
+        if (response != null && response.length() > 0) {
+            val viewModel by viewModels<DeviceRecordViewModel>()
+            viewModel.set(response.getJSONObject(0))
         }
     }
 
@@ -173,7 +200,8 @@ class FullscreenActivity : AppCompatActivity() {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(100)
+        //delayedHide(100)
+        hide()
     }
 
     private fun toggle() {

@@ -1,5 +1,6 @@
 package org.sorakun.soradisplay.weatherapi
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,14 +31,15 @@ class IntraDayForecastAdapter () :
         }
 
         fun bind(hour : ForecastRecord.Hour) {
-            val printer = SimpleDateFormat("HH:mm")
+            val printer = SimpleDateFormat.getTimeInstance()//"HH:mm")
             val parser = SimpleDateFormat("yyyy-MM-dd HH:mm")
             try {
                 datetime.text = parser.parse(hour.time)?.let { printer.format(it) }
             } catch (e: ParseException) {
+                Log.e("IntraDayForecastAdapter", "Unable to parse date: " + hour.time)
             }
             Util.callPicasso(hour.condition.icon, icon)
-            data1.text = Util.printF("%d°c", hour.tempC.toInt())
+            data1.text = Util.printF("%d°", hour.tempC.toInt())
             data1.setTextColor(Util.getTemperatureColor(hour.tempC))
             val rainOrSnow: Double =
                 if (hour.chanceOfSnow > 0.0) hour.chanceOfSnow else hour.chanceOfRain

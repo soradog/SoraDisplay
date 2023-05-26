@@ -1,30 +1,21 @@
 package org.sorakun.soradisplay.weatherapi;
 
-import android.app.Activity;
 import android.os.Handler;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.sorakun.soradisplay.FullscreenActivity;
 
-import androidx.fragment.app.Fragment;
-
 public class GetForecastRunnable implements Runnable {
 
-    private FullscreenActivity activity;
-    private Handler handler;
-
-    private final int repeatMinutes = 10;
+    private final FullscreenActivity activity;
+    private final Handler handler;
 
     public GetForecastRunnable(FullscreenActivity f) {
         activity = f;
@@ -40,6 +31,7 @@ public class GetForecastRunnable implements Runnable {
         sendRequest();
 
         // Repeat this the same runnable code block again another 2 seconds
+        int repeatMinutes = 10;
         handler.postDelayed(this, repeatMinutes * 60 * 1000);
     }
 
@@ -48,11 +40,11 @@ public class GetForecastRunnable implements Runnable {
             String url = "http://api.weatherapi.com/v1/forecast.json?key=5f4e6392424947e58a2135620230605&q=Tokyo&days=10&aqi=no&alerts=no";
 
             //creating json request for the NatureRemo sensor
-            JsonRequest request = new JsonObjectRequest(
+            JsonRequest<JSONObject> request = new JsonObjectRequest(
                     Request.Method.GET,
                     url,
                     null,
-                    activity::onResponse,
+                    activity::onResponseJSONObject,
                     this::onErrorResponse
             );
             RequestQueue queue = Volley.newRequestQueue(activity);

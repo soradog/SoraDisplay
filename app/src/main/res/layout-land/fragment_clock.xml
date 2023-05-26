@@ -36,6 +36,16 @@
             android:textColor="@color/light_blue_600"
             android:textSize="40sp" />
 
+        <TextView
+            android:id="@+id/textDateDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="end"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
     </LinearLayout>
 
     <TextView
@@ -52,18 +62,8 @@
         android:layout_height="wrap_content"
         android:layerType="software"
         android:textColor="#fff"
-        android:textSize="120sp"
+        android:textSize="220sp"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textDateDisplay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:gravity="end"
-        android:text=""
-        android:textColor="@color/white"
-        android:textSize="40sp" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->

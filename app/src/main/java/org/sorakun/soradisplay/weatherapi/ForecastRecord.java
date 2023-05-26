@@ -43,30 +43,42 @@ public class ForecastRecord {
     /**
      * get the list of current day's hours , filtered
      * by last updated epoch
-     * @return
+     * @return a list of Hour object
      */
     public ArrayList<Hour> getForecastedHours() {
-        Hour[] hours = forecast.forecastday[0].hour;
+        Hour[] today = forecast.forecastday[0].hour;
         Hour firstHour = null;
         ArrayList<Hour> results = new ArrayList<>();
-        for (int i = 0; i < hours.length; i++) {
+        for (Hour hour : today) {
 
-            if (current.lastUpdatedEpoch < hours[i].timeEpoch) {
-                results.add(hours[i]);
+            if (current.lastUpdatedEpoch < hour.timeEpoch) {
+                results.add(hour);
             } else {
-                firstHour = hours[i];
+                firstHour = hour;
             }
         }
         if (firstHour != null) {
             results.add(0, firstHour);
         }
+        Hour[] tomorrow = forecast.forecastday[1].hour;
+        for (Hour hour : tomorrow) {
+
+            if (current.lastUpdatedEpoch < hour.timeEpoch) {
+                results.add(hour);
+            }
+        }
         return results;
     }
 
-    public ForecastRecord(JSONObject o) throws JSONException {
+    public ForecastRecord() {
+    }
+    public void update(JSONObject o) throws JSONException {
         this.location = new Location(o.getJSONObject("location"));
         this.current = new Current(o.getJSONObject("current"));
         this.forecast = new Forecast(o.getJSONObject("forecast"));
+    }
+    public Boolean isReady() {
+        return location != null;
     }
 
     public void updateTodayViews(FragmentTodayWeatherBinding binding) {
@@ -95,10 +107,10 @@ public class ForecastRecord {
         binding.label2.setText("Humidity:");
         binding.value2.setText(Util.printF("%d%%", current.humidity.intValue()));
         binding.value2.setTextColor(getHumidityColor(current.humidity));
-        binding.label3.setText("Rain:");
-        binding.value3.setText(Util.printF("%dmm", current.precipMm.intValue()));
-        binding.label4.setText("Wind (km/h):");
-        binding.value4.setText(Util.printF("%d~%d", current.windKph.intValue(), current.gustKph.intValue()));
+        //binding.label3.setText("Rain:");
+        //binding.value3.setText(Util.printF("%dmm", current.precipMm.intValue()));
+        binding.label3.setText("Wind (km/h):");
+        binding.value3.setText(Util.printF("%d~%d", current.windKph.intValue(), current.gustKph.intValue()));
     }
 
     public void updateFutureViews(FragmentWeatherForecastBinding binding) {

@@ -22,8 +22,8 @@ class WeeklyForecastAdapter () :
         private val data1 : TextView
         private val data2 : TextView
         private val data3 : TextView
-        private val data4 : TextView
-        private val data5 : TextView
+        //private val data4 : TextView
+        //private val data5 : TextView
 
         init {
             date = view.findViewById(R.id.weather_full_datetime)
@@ -31,8 +31,8 @@ class WeeklyForecastAdapter () :
             data1 = view.findViewById(R.id.weather_full_value1)
             data2 = view.findViewById(R.id.weather_full_value2)
             data3 = view.findViewById(R.id.weather_full_value3)
-            data4 = view.findViewById(R.id.weather_full_value4)
-            data5 = view.findViewById(R.id.weather_full_value5)
+            //data4 = view.findViewById(R.id.weather_full_value4)
+            //data5 = view.findViewById(R.id.weather_full_value5)
         }
 
         fun bind(fd : ForecastRecord.Forecastday) {
@@ -44,17 +44,17 @@ class WeeklyForecastAdapter () :
             }
             //DownloadImageTask(icon).execute(fd.day.condition.icon)
             Util.callPicasso(fd.day.condition.icon, icon)
-            data1.text = Util.printF("%d°c", fd.day.maxtempC.toInt())
+            data1.text = Util.printF("%d°", fd.day.maxtempC.toInt())
             data1.setTextColor(Util.getTemperatureColor(fd.day.maxtempC))
-            data2.text = Util.printF("%d°c", fd.day.mintempC.toInt())
+            data2.text = Util.printF("%d°", fd.day.mintempC.toInt())
             data2.setTextColor(Util.getTemperatureColor(fd.day.mintempC))
             val rainOrSnow: Double =
                 if (fd.day.dailyChanceOfSnow > 0.0) fd.day.dailyChanceOfSnow else fd.day.dailyChanceOfRain
             data3.text = Util.printF("%d%%", rainOrSnow.toInt())
             data3.setTextColor(Util.getChanceOfRainColor(rainOrSnow))
-            data4.text = Util.printF("%d%%", fd.day.avghumidity.toInt())
-            data4.setTextColor(Util.getHumidityColor(fd.day.avghumidity))
-            data5.text = Util.printF("%d", fd.day.maxwindKph.toInt())
+            //data4.text = Util.printF("%d%%", fd.day.avghumidity.toInt())
+            //data4.setTextColor(Util.getHumidityColor(fd.day.avghumidity))
+            //data5.text = Util.printF("%d", fd.day.maxwindKph.toInt())
         }
     }
 
