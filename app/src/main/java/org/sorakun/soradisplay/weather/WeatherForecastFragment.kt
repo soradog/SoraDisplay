@@ -1,25 +1,27 @@
-package org.sorakun.soradisplay.weatherapi
+package org.sorakun.soradisplay.weather
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.sorakun.soradisplay.FullscreenActivity
 import org.sorakun.soradisplay.databinding.FragmentWeatherForecastBinding
+import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecord
+import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecordViewModel
+import org.sorakun.soradisplay.weather.visualcrossing.WeeklyForecastAdapter
 import kotlin.Boolean
-import kotlin.Suppress
 
 /**
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class WeatherForecastFragment : Fragment() {
+class WeatherForecastFragment(fs: FullscreenActivity) : Fragment() {
+
+    private val activity : FullscreenActivity = fs
     private val forecastAdapter = WeeklyForecastAdapter()
     private lateinit var forecastRecord : ForecastRecord
 
@@ -56,6 +58,7 @@ class WeatherForecastFragment : Fragment() {
         visible = true
 
         fullscreenContent = binding.fullscreenContent
+        fullscreenContent?.setOnClickListener { activity.toggle() }
 
         if (this::forecastRecord.isInitialized) {
             forecastRecord.updateFutureViews(binding)
@@ -93,8 +96,8 @@ class WeatherForecastFragment : Fragment() {
 
         if (t != null) {
             forecastRecord = t
-            val days = forecastRecord.forecast.forecastday
-            forecastAdapter.submitList(days.asList() as MutableList<ForecastRecord.Forecastday>)
+            val days = forecastRecord.days
+            forecastAdapter.submitList(days as MutableList<ForecastRecord.Day>)
         }
     }
 }

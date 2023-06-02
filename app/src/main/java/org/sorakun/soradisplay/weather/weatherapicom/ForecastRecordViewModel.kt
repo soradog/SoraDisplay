@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay.weatherapi
+package org.sorakun.soradisplay.weather.weatherapicom
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

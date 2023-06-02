@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay.weatherapi
+package org.sorakun.soradisplay.weather.weatherapicom
 
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +43,7 @@ class WeeklyForecastAdapter () :
             } catch (e: ParseException) {
             }
             //DownloadImageTask(icon).execute(fd.day.condition.icon)
-            Util.callPicasso(fd.day.condition.icon, icon)
+            ForecastRecord.callPicasso(fd.day.condition.icon, icon)
             data1.text = Util.printF("%d°", fd.day.maxtempC.toInt())
             data1.setTextColor(Util.getTemperatureColor(fd.day.maxtempC))
             data2.text = Util.printF("%d°", fd.day.mintempC.toInt())

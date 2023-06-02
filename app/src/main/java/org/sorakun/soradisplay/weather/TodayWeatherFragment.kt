@@ -1,24 +1,27 @@
-package org.sorakun.soradisplay.weatherapi
+package org.sorakun.soradisplay.weather
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.sorakun.soradisplay.FullscreenActivity
 import org.sorakun.soradisplay.databinding.FragmentTodayWeatherBinding
+import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecord
+import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecordViewModel
+import org.sorakun.soradisplay.weather.visualcrossing.IntraDayForecastAdapter
 
 /**
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-open class TodayWeatherFragment : Fragment() {
+open class TodayWeatherFragment(fs : FullscreenActivity) : Fragment() {
+
+    private val activity : FullscreenActivity = fs
     private val forecastAdapter = IntraDayForecastAdapter()
     private lateinit var forecastRecord : ForecastRecord
 
@@ -55,7 +58,7 @@ open class TodayWeatherFragment : Fragment() {
         visible = true
 
         fullscreenContent = binding.fullscreenContent
-        // Set up the user interaction to manually show or hide the system UI.
+        fullscreenContent?.setOnClickListener { activity.toggle() }
 
         if (this::forecastRecord.isInitialized) {
             Log.d("TodayWeatherFragment", "onResume: valid forecastRecord proceed with update")
@@ -99,10 +102,10 @@ open class TodayWeatherFragment : Fragment() {
     }
 
     fun onChanged(t: ForecastRecord?) {
-        if (t != null) {
+        if (t != null && t.isReady() == true) {
             Log.d("TodayWeatherFragment", "onChanged: Valid forecastRecord received")
             forecastRecord = t
-            val hours = forecastRecord.forecastedHours
+            val hours = forecastRecord.getForecastedHours()
             forecastAdapter.submitList(hours)
         } else {
             Log.e("TodayWeatherFragment", "onChanged: Invalid forecastRecord received")
