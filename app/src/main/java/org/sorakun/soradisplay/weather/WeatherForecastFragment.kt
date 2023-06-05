@@ -19,9 +19,8 @@ import kotlin.Boolean
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class WeatherForecastFragment(fs: FullscreenActivity) : Fragment() {
+class WeatherForecastFragment() : Fragment() {
 
-    private val activity : FullscreenActivity = fs
     private val forecastAdapter = WeeklyForecastAdapter()
     private lateinit var forecastRecord : ForecastRecord
 
@@ -56,9 +55,9 @@ class WeatherForecastFragment(fs: FullscreenActivity) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         visible = true
-
+        val parentActivity : FullscreenActivity = activity as FullscreenActivity
         fullscreenContent = binding.fullscreenContent
-        fullscreenContent?.setOnClickListener { activity.toggle() }
+        fullscreenContent?.setOnClickListener { parentActivity.toggle() }
 
         if (this::forecastRecord.isInitialized) {
             forecastRecord.updateFutureViews(binding)
@@ -94,7 +93,7 @@ class WeatherForecastFragment(fs: FullscreenActivity) : Fragment() {
 
     fun onChanged(t: ForecastRecord?) {
 
-        if (t != null) {
+        if (t?.isReady() == true) {
             forecastRecord = t
             val days = forecastRecord.days
             forecastAdapter.submitList(days as MutableList<ForecastRecord.Day>)

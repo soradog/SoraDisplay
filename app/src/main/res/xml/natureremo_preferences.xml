@@ -1,0 +1,28 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        app:key="natureremo"
+        app:summaryOff="@string/natureremo_api_enable_summary_off"
+        app:summaryOn="@string/natureremo_api_enable_summary_on"
+        app:defaultValue="false"
+        app:title="@string/natureremo_api_enable" />
+
+    <EditTextPreference
+        app:dependency="natureremo"
+        app:key="natureremo_sync_time"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
+        app:title="@string/natureremo_api_sync_mins"
+        app:defaultValue="5"
+        app:summary="@string/natureremo_api_sync_mins_summary"
+         />
+
+    <EditTextPreference
+        app:dependency="natureremo"
+        app:key="natureremo_sync_api_key"
+        app:title="@string/natureremo_api_sync_key"
+        app:summary="@string/natureremo_api_sync_key_summary"
+        />
+
+</PreferenceScreen>

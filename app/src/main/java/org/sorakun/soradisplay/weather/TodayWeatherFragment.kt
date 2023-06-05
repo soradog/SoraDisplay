@@ -19,9 +19,8 @@ import org.sorakun.soradisplay.weather.visualcrossing.IntraDayForecastAdapter
  * An example full-screen fragment that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-open class TodayWeatherFragment(fs : FullscreenActivity) : Fragment() {
+open class TodayWeatherFragment() : Fragment() {
 
-    private val activity : FullscreenActivity = fs
     private val forecastAdapter = IntraDayForecastAdapter()
     private lateinit var forecastRecord : ForecastRecord
 
@@ -58,11 +57,12 @@ open class TodayWeatherFragment(fs : FullscreenActivity) : Fragment() {
         visible = true
 
         fullscreenContent = binding.fullscreenContent
-        fullscreenContent?.setOnClickListener { activity.toggle() }
+        val parentActivity : FullscreenActivity = activity as FullscreenActivity
+        fullscreenContent?.setOnClickListener { parentActivity.toggle() }
 
         if (this::forecastRecord.isInitialized) {
             Log.d("TodayWeatherFragment", "onResume: valid forecastRecord proceed with update")
-            forecastRecord.updateTodayViews(binding)
+            forecastRecord.updateTodayViews(context, binding)
         } else {
             Log.e("TodayWeatherFragment", "onResume: forecastRecord not initialized")
         }
@@ -76,7 +76,7 @@ open class TodayWeatherFragment(fs : FullscreenActivity) : Fragment() {
 
         if (this::forecastRecord.isInitialized) {
             Log.d("TodayWeatherFragment", "onResume: valid forecastRecord proceed with update")
-            forecastRecord.updateTodayViews(binding)
+            forecastRecord.updateTodayViews(this.context, binding)
         } else {
             Log.e("TodayWeatherFragment", "onResume: forecastRecord not initialized")
         }

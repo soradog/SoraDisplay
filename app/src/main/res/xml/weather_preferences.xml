@@ -1,0 +1,35 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        app:key="weatherapi"
+        app:summaryOff="@string/weather_api_enable_summary_off"
+        app:summaryOn="@string/weather_api_enable_summary_on"
+        app:defaultValue="false"
+        app:title="@string/weather_api_enable" />
+
+    <EditTextPreference
+        app:dependency="weatherapi"
+        app:key="weather_location_name"
+        app:title="@string/weather_api_location_name"
+        app:summary="@string/weather_api_location_name_summary"
+        />
+
+    <EditTextPreference
+        app:dependency="weatherapi"
+        app:key="weather_sync_time"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
+        app:title="@string/weather_api_sync_mins"
+        app:defaultValue="10"
+        app:summary="@string/weather_api_sync_mins_summary"
+        />
+
+    <EditTextPreference
+        app:dependency="weatherapi"
+        app:key="weather_sync_api_key"
+        app:title="@string/weather_api_sync_key"
+        app:summary="@string/weather_api_sync_key_summary"
+        />
+
+</PreferenceScreen>

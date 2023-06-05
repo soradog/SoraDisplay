@@ -3,23 +3,23 @@ package org.sorakun.soradisplay
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.os.*
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
+import android.view.*
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
-import androidx.work.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
 import org.sorakun.soradisplay.natureremo.*
-import org.sorakun.soradisplay.weatherapi.*
+import org.sorakun.soradisplay.weather.*
+import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecordViewModel
+import org.sorakun.soradisplay.weather.visualcrossing.GetForecastRunnable
 import java.util.*
 
 
@@ -51,12 +51,9 @@ class FullscreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFullscreenBinding
     private lateinit var fullscreenContent: ViewPager2
     private lateinit var fragmentAdapter: FragmentAdapter
-
-    //private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
 
     private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
-
         override fun onDockOrBatteryStateChanged(isChargingOrDocked : Boolean) {
             disableScreenSleep (isChargingOrDocked)
         }
@@ -90,21 +87,29 @@ class FullscreenActivity : AppCompatActivity() {
     private lateinit var forecastRunnable : GetForecastRunnable
     private lateinit var devicesRunnable : DevicesRequestRunnable
 
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private val delayHideTouchListener = View.OnTouchListener { view, motionEvent ->
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS)
+    private val clockFragment = ClockFragment()
+    private val todayFragment = TodayWeatherFragment()
+    private val forecastFragment = WeatherForecastFragment()
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                hide()
+                return true
             }
-            MotionEvent.ACTION_UP -> view.performClick()
-            else -> {
+            R.id.setting_button -> {
+                val setting = Intent(this@FullscreenActivity, SettingsActivity::class.java)
+                startActivity(setting)
+                return true
             }
         }
-        false
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -123,19 +128,12 @@ class FullscreenActivity : AppCompatActivity() {
         fullscreenContent.setOnClickListener { toggle() }
 
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
-        fragmentAdapter.addFragment(ClockFragment())
-        fragmentAdapter.addFragment(TodayWeatherFragment())
-        fragmentAdapter.addFragment(WeatherForecastFragment())
+        fragmentAdapter.addFragment(clockFragment)
+        fragmentAdapter.addFragment(todayFragment)
+        fragmentAdapter.addFragment(forecastFragment)
 
         fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
         fullscreenContent.adapter = fragmentAdapter
-
-        //fullscreenContentControls = binding.fullscreenContentControls
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        //binding.dummyButton.setOnTouchListener(delayHideTouchListener)
 
         // Schedule a timer event to auto flip through the different viewpages
         val handler = Handler()
@@ -154,9 +152,9 @@ class FullscreenActivity : AppCompatActivity() {
             }
         }, 20000, 20000)
 
+
         forecastRunnable = GetForecastRunnable(this)
         forecastRunnable.firstRun()
-
         devicesRunnable = DevicesRequestRunnable(this)
         devicesRunnable.firstRun()
 
@@ -167,6 +165,26 @@ class FullscreenActivity : AppCompatActivity() {
         val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                 status == BatteryManager.BATTERY_STATUS_FULL
         disableScreenSleep (isCharging)
+    }
+
+    private val preferenceListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { pref, tag ->
+            if (pref != null &&
+                    tag.contains("natureremo", false)) {
+                devicesRunnable.firstRun()
+            }
+        }
+
+    override fun onResume() {
+        super.onResume()
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPref.registerOnSharedPreferenceChangeListener(preferenceListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPref.registerOnSharedPreferenceChangeListener(preferenceListener)
     }
 
     private fun disableScreenSleep(chargingOrDocking : Boolean) {
@@ -200,11 +218,11 @@ class FullscreenActivity : AppCompatActivity() {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        //delayedHide(100)
-        hide()
+        delayedHide(100)
+        //hide()
     }
 
-    private fun toggle() {
+    fun toggle() {
         if (isFullscreen) {
             hide()
         } else {
@@ -268,3 +286,4 @@ class FullscreenActivity : AppCompatActivity() {
         private const val UI_ANIMATION_DELAY = 300
     }
 }
+

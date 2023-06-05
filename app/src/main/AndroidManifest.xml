@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,8 +9,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SoraDisplay"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".FullscreenActivity"
             android:configChanges="keyboardHidden|screenSize"
@@ -25,8 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".SystemBroadcastReceiver" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

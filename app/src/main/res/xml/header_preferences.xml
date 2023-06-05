@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:fragment="org.sorakun.soradisplay.SettingsActivity$NatureRemoFragment"
+        app:key="natureremo_header"
+        app:title="@string/natureremo_preferences" />
+
+    <Preference
+        app:fragment="org.sorakun.soradisplay.SettingsActivity$WeatherApiFragment"
+        app:key="weather_header"
+        app:title="@string/weather_preference" />
+
+</PreferenceScreen>

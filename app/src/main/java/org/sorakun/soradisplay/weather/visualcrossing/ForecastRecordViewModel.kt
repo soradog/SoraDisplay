@@ -1,8 +1,9 @@
-package org.sorakun.soradisplay.weather.weatherapicom
+package org.sorakun.soradisplay.weather.visualcrossing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.squareup.moshi.Moshi
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -19,6 +20,9 @@ class ForecastRecordViewModel : ViewModel() {
 
     @Throws(JSONException::class)
     fun set(record: JSONObject?) {
-        uiState.value!!.update(record)
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter = moshi.adapter(ForecastRecord::class.java)
+        uiState.value = jsonAdapter.fromJson(record.toString())
     }
 }
+

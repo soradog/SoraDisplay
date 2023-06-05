@@ -17,5 +17,32 @@
     <string name="generic_blank_string">    </string>
     <string name="generic_degree_celsius">°c</string>
     <string name="generic_rain_label">Rain</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="setting_title">Settings</string>
+
+    <!-- NatureRemo Preferences -->
+    <string name="natureremo_preferences">NatureRemo preferences</string>
+    <string name="natureremo_api_enable">Enable NatureRemo API integration</string>
+    <string name="natureremo_api_enable_summary_on">Periodically query your NatureRemo temperature/humidity </string>
+    <string name="natureremo_api_enable_summary_off">NatureRemo query disabled</string>
+    <string name="natureremo_api_sync_mins">RestAPI sync period (minutes)</string>
+    <string name="natureremo_api_sync_mins_summary">Frequency to query the NatureRemo RestAPI, in minutes</string>
+    <string name="natureremo_api_sync_key">RestAPI sync key</string>
+    <string name="natureremo_api_sync_key_summary">Get your own free key at https://home.nature.global/</string>
+
+    <!-- Weather Preferences -->
+    <string name="weather_preference">Weather preferences</string>
+    <string name="weather_api_enable">Enable VisualCrossing API integration</string>
+    <string name="weather_api_enable_summary_on">Periodically download local weather information from VisualCrossing</string>
+    <string name="weather_api_enable_summary_off">Weather info disabled</string>
+    <string name="weather_api_sync_mins">Weather API sync period (minutes)</string>
+    <string name="weather_api_sync_mins_summary">Frequency to download weather info, in minutes</string>
+    <string name="weather_api_sync_key">Weather API sync key</string>
+    <string name="weather_api_sync_key_summary">Get your own free key at https://www.visualcrossing.com/</string>
+    <string name="weather_api_location_name">Name of location for weather info</string>
+    <string name="weather_api_location_name_summary">Enter name of city in order to download weather info</string>
 
 </resources>

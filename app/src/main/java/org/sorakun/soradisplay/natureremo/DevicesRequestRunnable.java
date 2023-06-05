@@ -1,33 +1,25 @@
 package org.sorakun.soradisplay.natureremo;
 
-import android.app.Activity;
-import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.sorakun.soradisplay.FullscreenActivity;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import android.os.Handler;
-import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import androidx.preference.PreferenceManager;
 
 public class DevicesRequestRunnable
         implements Runnable, Response.ErrorListener {
 
     private final FullscreenActivity activity;
     private final Handler handler;
-
-    private final static int repeatMinutes = 5;
 
     public DevicesRequestRunnable(FullscreenActivity f) {
         activity = f;
@@ -38,12 +30,22 @@ public class DevicesRequestRunnable
         handler.post(this);
     }
 
+    private Integer repeatMinutes;
+    private Boolean enabled;
+    private String apiKey;
+
     @Override
     public void run() {
-        sendRequest();
-
-        // Repeat this the same runnable code block again another 2 seconds
-        handler.postDelayed(this, repeatMinutes * 60 * 1000);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        enabled = sharedPref.getBoolean("natureremo", false);
+        apiKey = sharedPref.getString("natureremo_sync_api_key", null);
+        String value = sharedPref.getString("natureremo_sync_time", "5");
+        repeatMinutes = Integer.parseInt(value);
+        if (enabled && apiKey != null && repeatMinutes > 0) {
+            sendRequest();
+            // Repeat this the same runnable code block again another 2 seconds
+            handler.postDelayed(this, repeatMinutes * 60 * 1000);
+        }
     }
 
     private void sendRequest() {
@@ -61,7 +63,10 @@ public class DevicesRequestRunnable
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer VO-oNV-ZqrpaVXHXny3hO6vWgcR7wY7a4jQseo82EpE.f0M8KiqPvKSjv8EJL3KXIyf4MnurGdZDnq0naJmlg8M");
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+                String apiKey = sharedPref.getString("natureremo_sync_api_key", "");
+                //params.put("Authorization", "Bearer VO-oNV-ZqrpaVXHXny3hO6vWgcR7wY7a4jQseo82EpE.f0M8KiqPvKSjv8EJL3KXIyf4MnurGdZDnq0naJmlg8M");
+                params.put("Authorization", "Bearer " + apiKey);
                 return params;
             }
         };

@@ -1,5 +1,6 @@
-package org.sorakun.soradisplay.weather.weatherapicom
+package org.sorakun.soradisplay.weather.visualcrossing
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class WeeklyForecastAdapter () :
-    ListAdapter<ForecastRecord.Forecastday, WeeklyForecastAdapter.ViewHolder>(ForecastDayDiffCallback) {
+    ListAdapter<ForecastRecord.Day, WeeklyForecastAdapter.ViewHolder>(ForecastDayDiffCallback) {
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val date : TextView
@@ -35,23 +36,22 @@ class WeeklyForecastAdapter () :
             //data5 = view.findViewById(R.id.weather_full_value5)
         }
 
-        fun bind(fd : ForecastRecord.Forecastday) {
+        fun bind(fd : ForecastRecord.Day) {
             val printer = SimpleDateFormat("dd\nEE")
             val parser = SimpleDateFormat("yyyy-MM-dd")
             try {
-                date.text = parser.parse(fd.date)?.let { printer.format(it) }
+                date.text = parser.parse(fd.datetime)?.let { printer.format(it) }
             } catch (e: ParseException) {
+                Log.e("WeeklyForecastAdapter", "Unable to parse ${fd.datetime}")
             }
             //DownloadImageTask(icon).execute(fd.day.condition.icon)
-            ForecastRecord.callPicasso(fd.day.condition.icon, icon)
-            data1.text = Util.printF("%d°", fd.day.maxtempC.toInt())
-            data1.setTextColor(Util.getTemperatureColor(fd.day.maxtempC))
-            data2.text = Util.printF("%d°", fd.day.mintempC.toInt())
-            data2.setTextColor(Util.getTemperatureColor(fd.day.mintempC))
-            val rainOrSnow: Double =
-                if (fd.day.dailyChanceOfSnow > 0.0) fd.day.dailyChanceOfSnow else fd.day.dailyChanceOfRain
-            data3.text = Util.printF("%d%%", rainOrSnow.toInt())
-            data3.setTextColor(Util.getChanceOfRainColor(rainOrSnow))
+            ForecastRecord.callPicasso(icon.context, fd.icon, icon)
+            data1.text = Util.printF("%d°", fd.tempmax.toInt())
+            data1.setTextColor(Util.getTemperatureColor(fd.tempmax))
+            data2.text = Util.printF("%d°", fd.tempmin.toInt())
+            data2.setTextColor(Util.getTemperatureColor(fd.tempmin))
+            data3.text = Util.printF("%d%%", fd.precipprob.toInt())
+            data3.setTextColor(Util.getChanceOfRainColor(fd.precipprob))
             //data4.text = Util.printF("%d%%", fd.day.avghumidity.toInt())
             //data4.setTextColor(Util.getHumidityColor(fd.day.avghumidity))
             //data5.text = Util.printF("%d", fd.day.maxwindKph.toInt())
@@ -74,12 +74,12 @@ class WeeklyForecastAdapter () :
     }
 }
 
-object ForecastDayDiffCallback : DiffUtil.ItemCallback<ForecastRecord.Forecastday>() {
-    override fun areItemsTheSame(oldItem: ForecastRecord.Forecastday, newItem: ForecastRecord.Forecastday): Boolean {
-        return oldItem.dateEpoch == newItem.dateEpoch
+object ForecastDayDiffCallback : DiffUtil.ItemCallback<ForecastRecord.Day>() {
+    override fun areItemsTheSame(oldItem: ForecastRecord.Day, newItem: ForecastRecord.Day): Boolean {
+        return oldItem.datetimeEpoch == newItem.datetimeEpoch
     }
 
-    override fun areContentsTheSame(oldItem: ForecastRecord.Forecastday, newItem: ForecastRecord.Forecastday): Boolean {
-        return oldItem.dateEpoch == newItem.dateEpoch
+    override fun areContentsTheSame(oldItem: ForecastRecord.Day, newItem: ForecastRecord.Day): Boolean {
+        return oldItem.datetimeEpoch == newItem.datetimeEpoch
     }
 }
