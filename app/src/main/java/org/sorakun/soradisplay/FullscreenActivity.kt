@@ -14,12 +14,9 @@ import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
 import org.json.JSONArray
-import org.json.JSONObject
 import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
 import org.sorakun.soradisplay.natureremo.*
 import org.sorakun.soradisplay.weather.*
-import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecordViewModel
-import org.sorakun.soradisplay.weather.visualcrossing.GetForecastRunnable
 import java.util.*
 
 
@@ -84,7 +81,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
     private var isFullscreen: Boolean = false
     private val hideRunnable = Runnable { hide() }
-    private lateinit var forecastRunnable : GetForecastRunnable
+    private lateinit var forecastRunnable : GetForecastRunnableBase
     private lateinit var devicesRunnable : DevicesRequestRunnable
 
     private val clockFragment = ClockFragment()
@@ -153,7 +150,7 @@ class FullscreenActivity : AppCompatActivity() {
         }, 20000, 20000)
 
 
-        forecastRunnable = GetForecastRunnable(this)
+        forecastRunnable = ServiceFactory.requestRunnable(this)
         forecastRunnable.firstRun()
         devicesRunnable = DevicesRequestRunnable(this)
         devicesRunnable.firstRun()
@@ -198,11 +195,6 @@ class FullscreenActivity : AppCompatActivity() {
             val toast = Toast.makeText(this, "Device is not charging/undocked. Screen sleep has been enabled.", Toast.LENGTH_SHORT)
             toast.show()
         }
-    }
-
-    fun onResponseJSONObject(response: JSONObject?) {
-        val viewModel by viewModels<ForecastRecordViewModel>()
-        viewModel.set(response)
     }
 
     fun onResponseJSONArray(response: JSONArray?) {

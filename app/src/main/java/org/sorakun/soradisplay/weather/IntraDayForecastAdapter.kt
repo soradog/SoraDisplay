@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay.weather.visualcrossing
+package org.sorakun.soradisplay.weather
 
 import android.content.Context
 import android.util.Log
@@ -16,7 +16,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class IntraDayForecastAdapter :
-    ListAdapter<ForecastRecord.Day.Hour, IntraDayForecastAdapter.ViewHolder>(HourDiffCallback) {
+    ListAdapter<ForecastRecordBase.DayBase.HourBase, IntraDayForecastAdapter.ViewHolder>(HourDiffCallback) {
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val datetime : TextView
@@ -33,7 +33,7 @@ class IntraDayForecastAdapter :
             context = view.context
         }
 
-        fun bind(hour : ForecastRecord.Day.Hour) {
+        fun bind(hour : ForecastRecordBase.DayBase.HourBase) {
             val printer = SimpleDateFormat("HH:mm")
             val parser = SimpleDateFormat("HH:mm:ss")
             try {
@@ -41,7 +41,7 @@ class IntraDayForecastAdapter :
             } catch (e: ParseException) {
                 Log.e("IntraDayForecastAdapter", "Unable to parse date: " + hour.datetime)
             }
-            ForecastRecord.callPicasso(context, hour.icon, icon)
+            ServiceFactory.setIcon(context, hour.icon, icon)
             data1.text = Util.printF("%d°", hour.temp.toInt())
             data1.setTextColor(Util.getTemperatureColor(hour.temp))
             data2.text = Util.printF("%d%%", hour.precipprob.toInt())
@@ -65,12 +65,16 @@ class IntraDayForecastAdapter :
     }
 }
 
-object HourDiffCallback : DiffUtil.ItemCallback<ForecastRecord.Day.Hour>() {
-    override fun areItemsTheSame(oldItem: ForecastRecord.Day.Hour, newItem: ForecastRecord.Day.Hour): Boolean {
+object HourDiffCallback : DiffUtil.ItemCallback<ForecastRecordBase.DayBase.HourBase>() {
+    override fun areItemsTheSame(
+        oldItem: ForecastRecordBase.DayBase.HourBase,
+        newItem: ForecastRecordBase.DayBase.HourBase): Boolean {
         return oldItem.datetimeEpoch == newItem.datetimeEpoch
     }
 
-    override fun areContentsTheSame(oldItem: ForecastRecord.Day.Hour, newItem: ForecastRecord.Day.Hour): Boolean {
+    override fun areContentsTheSame(
+        oldItem: ForecastRecordBase.DayBase.HourBase,
+        newItem: ForecastRecordBase.DayBase.HourBase): Boolean {
         return oldItem.datetimeEpoch == newItem.datetimeEpoch
     }
 }

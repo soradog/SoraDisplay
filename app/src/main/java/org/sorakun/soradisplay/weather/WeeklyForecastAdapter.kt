@@ -1,4 +1,4 @@
-package org.sorakun.soradisplay.weather.visualcrossing
+package org.sorakun.soradisplay.weather
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class WeeklyForecastAdapter () :
-    ListAdapter<ForecastRecord.Day, WeeklyForecastAdapter.ViewHolder>(ForecastDayDiffCallback) {
+    ListAdapter<ForecastRecordBase.DayBase, WeeklyForecastAdapter.ViewHolder>(ForecastDayDiffCallback) {
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val date : TextView
@@ -36,7 +36,7 @@ class WeeklyForecastAdapter () :
             //data5 = view.findViewById(R.id.weather_full_value5)
         }
 
-        fun bind(fd : ForecastRecord.Day) {
+        fun bind(fd : ForecastRecordBase.DayBase) {
             val printer = SimpleDateFormat("dd\nEE")
             val parser = SimpleDateFormat("yyyy-MM-dd")
             try {
@@ -45,7 +45,7 @@ class WeeklyForecastAdapter () :
                 Log.e("WeeklyForecastAdapter", "Unable to parse ${fd.datetime}")
             }
             //DownloadImageTask(icon).execute(fd.day.condition.icon)
-            ForecastRecord.callPicasso(icon.context, fd.icon, icon)
+            ServiceFactory.setIcon(icon.context, fd.icon, icon)
             data1.text = Util.printF("%d°", fd.tempmax.toInt())
             data1.setTextColor(Util.getTemperatureColor(fd.tempmax))
             data2.text = Util.printF("%d°", fd.tempmin.toInt())
@@ -74,12 +74,12 @@ class WeeklyForecastAdapter () :
     }
 }
 
-object ForecastDayDiffCallback : DiffUtil.ItemCallback<ForecastRecord.Day>() {
-    override fun areItemsTheSame(oldItem: ForecastRecord.Day, newItem: ForecastRecord.Day): Boolean {
+object ForecastDayDiffCallback : DiffUtil.ItemCallback<ForecastRecordBase.DayBase>() {
+    override fun areItemsTheSame(oldItem: ForecastRecordBase.DayBase, newItem: ForecastRecordBase.DayBase): Boolean {
         return oldItem.datetimeEpoch == newItem.datetimeEpoch
     }
 
-    override fun areContentsTheSame(oldItem: ForecastRecord.Day, newItem: ForecastRecord.Day): Boolean {
+    override fun areContentsTheSame(oldItem: ForecastRecordBase.DayBase, newItem: ForecastRecordBase.DayBase): Boolean {
         return oldItem.datetimeEpoch == newItem.datetimeEpoch
     }
 }

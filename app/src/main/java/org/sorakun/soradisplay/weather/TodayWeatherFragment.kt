@@ -10,10 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.sorakun.soradisplay.FullscreenActivity
+import org.sorakun.soradisplay.Util
 import org.sorakun.soradisplay.databinding.FragmentTodayWeatherBinding
-import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecord
-import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecordViewModel
-import org.sorakun.soradisplay.weather.visualcrossing.IntraDayForecastAdapter
 
 /**
  * An example full-screen fragment that shows and hides the system UI (i.e.
@@ -22,7 +20,6 @@ import org.sorakun.soradisplay.weather.visualcrossing.IntraDayForecastAdapter
 open class TodayWeatherFragment() : Fragment() {
 
     private val forecastAdapter = IntraDayForecastAdapter()
-    private lateinit var forecastRecord : ForecastRecord
 
     private var visible: Boolean = false
 
@@ -46,7 +43,14 @@ open class TodayWeatherFragment() : Fragment() {
 
         val viewModel by activityViewModels<ForecastRecordViewModel>()
         viewModel.get().observe(this.viewLifecycleOwner) {
-            onChanged(it)
+            if (it?.isReady() == true) {
+                Log.d("TodayWeatherFragment", "onChanged: Valid forecastRecord received")
+                val hours = it.getForecastedHours()
+                forecastAdapter.submitList(hours)
+                updateTodayViews(it)
+            } else {
+                Log.e("TodayWeatherFragment", "onChanged: Invalid forecastRecord received")
+            }
         }
         return binding.root
     }
@@ -59,13 +63,6 @@ open class TodayWeatherFragment() : Fragment() {
         fullscreenContent = binding.fullscreenContent
         val parentActivity : FullscreenActivity = activity as FullscreenActivity
         fullscreenContent?.setOnClickListener { parentActivity.toggle() }
-
-        if (this::forecastRecord.isInitialized) {
-            Log.d("TodayWeatherFragment", "onResume: valid forecastRecord proceed with update")
-            forecastRecord.updateTodayViews(context, binding)
-        } else {
-            Log.e("TodayWeatherFragment", "onResume: forecastRecord not initialized")
-        }
     }
 
     override fun onResume() {
@@ -73,13 +70,6 @@ open class TodayWeatherFragment() : Fragment() {
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         binding.recyclerView.adapter = forecastAdapter
-
-        if (this::forecastRecord.isInitialized) {
-            Log.d("TodayWeatherFragment", "onResume: valid forecastRecord proceed with update")
-            forecastRecord.updateTodayViews(this.context, binding)
-        } else {
-            Log.e("TodayWeatherFragment", "onResume: forecastRecord not initialized")
-        }
     }
 
     override fun onPause() {
@@ -95,20 +85,45 @@ open class TodayWeatherFragment() : Fragment() {
         fullscreenContent = null
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    fun onChanged(t: ForecastRecord?) {
-        if (t != null && t.isReady() == true) {
-            Log.d("TodayWeatherFragment", "onChanged: Valid forecastRecord received")
-            forecastRecord = t
-            val hours = forecastRecord.getForecastedHours()
-            forecastAdapter.submitList(hours)
-        } else {
-            Log.e("TodayWeatherFragment", "onChanged: Invalid forecastRecord received")
+    private fun updateTodayViews(record : ForecastRecordBase) {
+        val currentConditions = record.getCurrentConditions()
+        // if lastupdated timestamp hasnt changed then dont update
+        if (currentConditions.datetime != "" &&
+            currentConditions.datetime.compareTo(
+                java.lang.String.valueOf(binding.lastupdated.text)
+            ) == 0
+        ) {
+            // lastupdated in this record is the same as the one in binding
+            // no need to update
+            return
         }
+        binding.lastupdated.text = currentConditions.datetime
+        binding.dayLocation.text = record.address
+        binding.temperature.text = Util.printF("%d°c", currentConditions.temp.toInt())
+        binding.temperature.setTextColor(Util.getTemperatureColor(currentConditions.temp))
+        binding.condition.text = Util.printF("%s", currentConditions.conditions)
+        binding.currentIcon.adjustViewBounds = true
+        binding.currentIcon.minimumWidth = 60
+        binding.currentIcon.minimumHeight = 60
+        //new Util.DownloadImageTask(binding.currentIcon).execute(current.condition.icon);
+        ServiceFactory.setIcon(context, currentConditions.icon, binding.currentIcon)
+        binding.label1.text = "Feels:"
+        binding.value1.text = Util.printF("%d°c", currentConditions.feelslike.toInt())
+        binding.value1.setTextColor(Util.getTemperatureColor(currentConditions.feelslike))
+        binding.label2.text = "Humidity:"
+        binding.value2.text = Util.printF("%d%%", currentConditions.humidity.toInt())
+        binding.value2.setTextColor(Util.getHumidityColor(currentConditions.humidity))
+        //binding.label3.setText("Rain:");
+        //binding.value3.setText(Util.printF("%dmm", current.precipMm.intValue()));
+        binding.label3.text = "Wind (km/h):"
+        binding.value3.text = Util.printF(
+            "%d",
+            currentConditions.windspeed.toInt()
+        )
     }
 }

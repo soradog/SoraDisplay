@@ -10,9 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.sorakun.soradisplay.FullscreenActivity
 import org.sorakun.soradisplay.databinding.FragmentWeatherForecastBinding
-import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecord
-import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecordViewModel
-import org.sorakun.soradisplay.weather.visualcrossing.WeeklyForecastAdapter
 import kotlin.Boolean
 
 /**
@@ -22,7 +19,6 @@ import kotlin.Boolean
 class WeatherForecastFragment() : Fragment() {
 
     private val forecastAdapter = WeeklyForecastAdapter()
-    private lateinit var forecastRecord : ForecastRecord
 
     private var visible: Boolean = false
 
@@ -46,7 +42,10 @@ class WeatherForecastFragment() : Fragment() {
 
         val viewModel by activityViewModels<ForecastRecordViewModel>()
         viewModel.get().observe(this.viewLifecycleOwner) {
-            onChanged(it)
+            if (it?.isReady() == true) {
+                forecastAdapter.submitList(it.getForecastedDays())
+                updateFutureViews(it)
+            }
         }
         return binding.root
     }
@@ -58,19 +57,11 @@ class WeatherForecastFragment() : Fragment() {
         val parentActivity : FullscreenActivity = activity as FullscreenActivity
         fullscreenContent = binding.fullscreenContent
         fullscreenContent?.setOnClickListener { parentActivity.toggle() }
-
-        if (this::forecastRecord.isInitialized) {
-            forecastRecord.updateFutureViews(binding)
-        }
     }
 
     override fun onResume() {
         super.onResume()
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-
-        if (this::forecastRecord.isInitialized) {
-            forecastRecord.updateFutureViews(binding)
-        }
     }
 
     override fun onPause() {
@@ -91,12 +82,18 @@ class WeatherForecastFragment() : Fragment() {
         _binding = null
     }
 
-    fun onChanged(t: ForecastRecord?) {
-
-        if (t?.isReady() == true) {
-            forecastRecord = t
-            val days = forecastRecord.days
-            forecastAdapter.submitList(days as MutableList<ForecastRecord.Day>)
+    private fun updateFutureViews(record : ForecastRecordBase) {
+        val currentConditions = record.getCurrentConditions()
+        // if lastupdated timestamp hasnt changed then dont update
+        if (currentConditions.datetime != "" && currentConditions.datetime.compareTo(
+                java.lang.String.valueOf(binding.lastupdated.text)
+            ) == 0
+        ) {
+            // lastupdated in this record is the same as the one in binding
+            // no need to update
+            return
         }
+        binding.lastupdated.text = currentConditions.datetime
+        binding.weekLocation.text = record.address
     }
 }
