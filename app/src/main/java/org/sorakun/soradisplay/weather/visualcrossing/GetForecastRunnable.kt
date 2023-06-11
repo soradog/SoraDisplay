@@ -1,5 +1,6 @@
 package org.sorakun.soradisplay.weather.visualcrossing
 
+import android.util.Log
 import androidx.activity.viewModels
 import com.android.volley.Request
 import com.android.volley.VolleyError
@@ -38,7 +39,9 @@ class GetForecastRunnable (private val activity: FullscreenActivity) : Runnable,
         queue.add(request)
     }
 
-    private fun onErrorResponse(error: VolleyError?) {}
+    private fun onErrorResponse(error: VolleyError?) {
+        Log.e("GetForecastRunnable", "Error: ${error?.localizedMessage}")
+    }
 
     private fun onResponseJSONObject(response: JSONObject?) {
         val viewModel by activity.viewModels<ForecastRecordViewModel>()

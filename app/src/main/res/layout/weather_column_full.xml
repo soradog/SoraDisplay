@@ -3,68 +3,56 @@
     android:id="@+id/weathercolumn"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:orientation="vertical"
     android:padding="20sp">
 
         <TextView
             android:id="@+id/weather_full_datetime"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:lines="2"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
             android:text="@string/weather_label_fetching"
             android:textColor="@color/gray_600"
-            android:textSize="40sp" />
+            android:textSize="50sp" />
 
         <ImageView
             android:id="@+id/weather_full_icon"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="70sp"
             android:layout_weight="1"
             android:contentDescription="@string/weather_icon_description"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
             android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/weather_full_value1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
             android:text="@string/weather_label_fetching"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="70sp" />
 
         <TextView
             android:id="@+id/weather_full_value2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
             android:text="@string/weather_label_fetching"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="70sp" />
 
         <TextView
             android:id="@+id/weather_full_value3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
             android:text="@string/weather_label_fetching"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="70sp" />
 
 
 </LinearLayout>

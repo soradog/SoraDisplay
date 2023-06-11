@@ -44,7 +44,6 @@ class WeatherForecastFragment() : Fragment() {
         viewModel.get().observe(this.viewLifecycleOwner) {
             if (it?.isReady() == true) {
                 forecastAdapter.submitList(it.getForecastedDays())
-                updateFutureViews(it)
             }
         }
         return binding.root
@@ -80,20 +79,5 @@ class WeatherForecastFragment() : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun updateFutureViews(record : ForecastRecordBase) {
-        val currentConditions = record.getCurrentConditions()
-        // if lastupdated timestamp hasnt changed then dont update
-        if (currentConditions.datetime != "" && currentConditions.datetime.compareTo(
-                java.lang.String.valueOf(binding.lastupdated.text)
-            ) == 0
-        ) {
-            // lastupdated in this record is the same as the one in binding
-            // no need to update
-            return
-        }
-        binding.lastupdated.text = currentConditions.datetime
-        binding.weekLocation.text = record.address
     }
 }

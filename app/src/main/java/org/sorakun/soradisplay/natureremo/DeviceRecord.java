@@ -2,14 +2,6 @@ package org.sorakun.soradisplay.natureremo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.sorakun.soradisplay.databinding.FragmentClockBinding;
-
-import java.util.Locale;
-
-import androidx.lifecycle.ViewModel;
-
-import static org.sorakun.soradisplay.Util.getHumidityColor;
-import static org.sorakun.soradisplay.Util.getTemperatureColor;
 
 public class DeviceRecord {
     private String name;

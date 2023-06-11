@@ -10,6 +10,6 @@
     </style>
 
     <style name="Widget.Theme.SoraDisplay.MyView" parent="">
-        <item name="android:background">@color/gray_400</item>
+        <item name="android:background">@color/light_blue_900</item>
     </style>
 </resources>

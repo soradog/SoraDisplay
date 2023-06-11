@@ -37,14 +37,13 @@ class WeeklyForecastAdapter () :
         }
 
         fun bind(fd : ForecastRecordBase.DayBase) {
-            val printer = SimpleDateFormat("dd\nEE")
+            val printer = SimpleDateFormat("dd (EE)")
             val parser = SimpleDateFormat("yyyy-MM-dd")
             try {
                 date.text = parser.parse(fd.datetime)?.let { printer.format(it) }
             } catch (e: ParseException) {
                 Log.e("WeeklyForecastAdapter", "Unable to parse ${fd.datetime}")
             }
-            //DownloadImageTask(icon).execute(fd.day.condition.icon)
             ServiceFactory.setIcon(icon.context, fd.icon, icon)
             data1.text = Util.printF("%d°", fd.tempmax.toInt())
             data1.setTextColor(Util.getTemperatureColor(fd.tempmax))
@@ -52,9 +51,6 @@ class WeeklyForecastAdapter () :
             data2.setTextColor(Util.getTemperatureColor(fd.tempmin))
             data3.text = Util.printF("%d%%", fd.precipprob.toInt())
             data3.setTextColor(Util.getChanceOfRainColor(fd.precipprob))
-            //data4.text = Util.printF("%d%%", fd.day.avghumidity.toInt())
-            //data4.setTextColor(Util.getHumidityColor(fd.day.avghumidity))
-            //data5.text = Util.printF("%d", fd.day.maxwindKph.toInt())
         }
     }
 

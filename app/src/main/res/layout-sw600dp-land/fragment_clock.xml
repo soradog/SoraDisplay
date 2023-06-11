@@ -4,7 +4,6 @@
     android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:orientation="vertical"
     android:padding="20sp"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
@@ -25,7 +24,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:textColor="@color/white"
-            android:textSize="80sp" />
+            android:textSize="120sp" />
 
         <TextView
             android:id="@+id/sensorHumidity"
@@ -34,7 +33,7 @@
             android:layout_weight="1"
             android:gravity="start"
             android:textColor="@color/light_blue_600"
-            android:textSize="80sp" />
+            android:textSize="120sp" />
 
         <TextView
             android:id="@+id/textDateDisplay"
@@ -44,7 +43,7 @@
             android:gravity="end"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="80sp" />
+            android:textSize="120sp" />
 
     </LinearLayout>
 

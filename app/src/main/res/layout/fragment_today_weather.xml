@@ -22,9 +22,8 @@
             android:id="@+id/soraDigitalClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minEms="6"
             android:textColor="@color/white"
-            android:textSize="60sp" />
+            android:textSize="40sp" />
 
         <TextView
             android:id="@+id/dayLocation"
@@ -32,62 +31,41 @@
             android:layout_height="wrap_content"
             android:text="@string/weather_label_fetching"
             android:textColor="@color/white"
-            android:textSize="60sp" />
-
-        <TextView
-            android:id="@+id/lastupdated"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textSize="40sp" />
 
     </TableRow>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <ImageView
+            android:id="@+id/currentIcon"
+            android:layout_width="300sp"
+            android:layout_height="300sp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/weather_icon_description"
+            android:minWidth="60dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/weather14" />
 
-            <ImageView
-                android:id="@+id/currentIcon"
-                android:layout_width="300sp"
-                android:layout_height="300sp"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/weather_icon_description"
-                android:minWidth="60dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/weather14" />
+        <TextView
+            android:id="@+id/condition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="22"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/temperature"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minEms="2"
-                android:text="22"
-                android:textColor="@color/white"
-                android:textSize="150sp" />
-
-            <TextView
-                android:id="@+id/condition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minEms="9"
-                android:text="22"
-                android:textColor="@color/white"
-                android:textSize="40sp" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="22"
+            android:textColor="@color/white"
+            android:textSize="120sp" />
 
         <TableLayout
             android:layout_width="wrap_content"
@@ -104,10 +82,11 @@
                     android:id="@+id/label1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill_vertical|end"
                     android:padding="20sp"
                     android:text="@string/weather_label_fetching"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="40sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/value1"
@@ -116,7 +95,7 @@
                     android:padding="20sp"
                     android:text="TextView"
                     android:textColor="@color/white"
-                    android:textSize="40sp" />
+                    android:textSize="20sp" />
             </TableRow>
 
             <TableRow
@@ -127,10 +106,11 @@
                     android:id="@+id/label2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill_vertical|end"
                     android:padding="20sp"
                     android:text="@string/weather_min_temp_label"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="40sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/value2"
@@ -139,7 +119,7 @@
                     android:padding="20sp"
                     android:text="TextView"
                     android:textColor="@color/white"
-                    android:textSize="40sp" />
+                    android:textSize="20sp" />
             </TableRow>
 
             <TableRow
@@ -150,10 +130,11 @@
                     android:id="@+id/label3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill_vertical|end"
                     android:padding="20sp"
                     android:text="@string/weather_humidity_label"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="40sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/value3"
@@ -162,24 +143,10 @@
                     android:padding="20sp"
                     android:text="TextView"
                     android:textColor="@color/white"
-                    android:textSize="40sp" />
+                    android:textSize="20sp" />
             </TableRow>
 
         </TableLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:padding="20sp"
-        android:paddingTop="40sp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
     </LinearLayout>
 

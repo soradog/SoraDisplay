@@ -6,7 +6,6 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.*
 import android.view.*
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -87,6 +86,7 @@ class FullscreenActivity : AppCompatActivity() {
     private val clockFragment = ClockFragment()
     private val todayFragment = TodayWeatherFragment()
     private val forecastFragment = WeatherForecastFragment()
+    private val nextHoursFragment = NextFewHoursWeatherFragment()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -127,6 +127,7 @@ class FullscreenActivity : AppCompatActivity() {
         fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
         fragmentAdapter.addFragment(clockFragment)
         fragmentAdapter.addFragment(todayFragment)
+        fragmentAdapter.addFragment(nextHoursFragment)
         fragmentAdapter.addFragment(forecastFragment)
 
         fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
@@ -188,12 +189,8 @@ class FullscreenActivity : AppCompatActivity() {
         if (chargingOrDocking) {
             // prevent screen going to sleep if device is charging
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            val toast = Toast.makeText(this, "Device is docked/charging. Screen sleep has been disabled.", Toast.LENGTH_SHORT)
-            toast.show()
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            val toast = Toast.makeText(this, "Device is not charging/undocked. Screen sleep has been enabled.", Toast.LENGTH_SHORT)
-            toast.show()
         }
     }
 

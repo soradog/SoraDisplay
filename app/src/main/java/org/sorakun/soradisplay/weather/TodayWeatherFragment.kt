@@ -1,14 +1,12 @@
 package org.sorakun.soradisplay.weather
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import org.sorakun.soradisplay.FullscreenActivity
 import org.sorakun.soradisplay.Util
 import org.sorakun.soradisplay.databinding.FragmentTodayWeatherBinding
@@ -18,8 +16,6 @@ import org.sorakun.soradisplay.databinding.FragmentTodayWeatherBinding
  * status bar and navigation/system bar) with user interaction.
  */
 open class TodayWeatherFragment() : Fragment() {
-
-    private val forecastAdapter = IntraDayForecastAdapter()
 
     private var visible: Boolean = false
 
@@ -38,18 +34,11 @@ open class TodayWeatherFragment() : Fragment() {
     ): View? {
 
         _binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
-        binding.recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerView.adapter = forecastAdapter
 
         val viewModel by activityViewModels<ForecastRecordViewModel>()
         viewModel.get().observe(this.viewLifecycleOwner) {
             if (it?.isReady() == true) {
-                Log.d("TodayWeatherFragment", "onChanged: Valid forecastRecord received")
-                val hours = it.getForecastedHours()
-                forecastAdapter.submitList(hours)
                 updateTodayViews(it)
-            } else {
-                Log.e("TodayWeatherFragment", "onChanged: Invalid forecastRecord received")
             }
         }
         return binding.root
@@ -68,8 +57,6 @@ open class TodayWeatherFragment() : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-
-        binding.recyclerView.adapter = forecastAdapter
     }
 
     override fun onPause() {
@@ -92,17 +79,6 @@ open class TodayWeatherFragment() : Fragment() {
 
     private fun updateTodayViews(record : ForecastRecordBase) {
         val currentConditions = record.getCurrentConditions()
-        // if lastupdated timestamp hasnt changed then dont update
-        if (currentConditions.datetime != "" &&
-            currentConditions.datetime.compareTo(
-                java.lang.String.valueOf(binding.lastupdated.text)
-            ) == 0
-        ) {
-            // lastupdated in this record is the same as the one in binding
-            // no need to update
-            return
-        }
-        binding.lastupdated.text = currentConditions.datetime
         binding.dayLocation.text = record.address
         binding.temperature.text = Util.printF("%d°c", currentConditions.temp.toInt())
         binding.temperature.setTextColor(Util.getTemperatureColor(currentConditions.temp))

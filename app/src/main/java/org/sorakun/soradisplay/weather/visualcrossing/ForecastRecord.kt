@@ -51,7 +51,7 @@ data class ForecastRecord (
         @Json(name = "moonphase")
         var moonphase: Double = 0.0, // 0.5
         @Json(name = "precip")
-        var precip: Int = 0, // 0
+        var precip: Double = 0.0, // 0
         @Json(name = "precipprob")
         override var precipprob: Double = 0.0, // 0
         @Json(name = "preciptype")

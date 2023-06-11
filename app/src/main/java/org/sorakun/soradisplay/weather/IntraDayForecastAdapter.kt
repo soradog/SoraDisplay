@@ -23,13 +23,15 @@ class IntraDayForecastAdapter :
         private val icon : ImageView
         private val data1 : TextView
         private val data2 : TextView
+        private val data3 : TextView
         private val context : Context
 
         init {
-            datetime = view.findViewById(R.id.weather_column_date)
-            icon = view.findViewById(R.id.weather_column_icon)
-            data1 = view.findViewById(R.id.weather_column_valueA)
-            data2 = view.findViewById(R.id.weather_column_valueB)
+            datetime = view.findViewById(R.id.weather_full_datetime)
+            icon = view.findViewById(R.id.weather_full_icon)
+            data1 = view.findViewById(R.id.weather_full_value1)
+            data2 = view.findViewById(R.id.weather_full_value2)
+            data3 = view.findViewById(R.id.weather_full_value3)
             context = view.context
         }
 
@@ -46,13 +48,14 @@ class IntraDayForecastAdapter :
             data1.setTextColor(Util.getTemperatureColor(hour.temp))
             data2.text = Util.printF("%d%%", hour.precipprob.toInt())
             data2.setTextColor(Util.getChanceOfRainColor(hour.precipprob))
+            data3.text = Util.printF("%dkm", hour.windspeed.toInt())
         }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.weather_column, viewGroup, false)
+            .inflate(R.layout.weather_column_full, viewGroup, false)
 
         return ViewHolder(view)
     }
