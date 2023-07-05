@@ -29,8 +29,8 @@ class ServiceFactory {
             }
         }
 
-        fun requestRunnable(activity : FullscreenActivity) : GetForecastRunnableBase {
-            return GetForecastRunnable(activity)
+        fun requestRunnable(context: Context, viewModel: ForecastRecordViewModel) : GetForecastRunnableBase {
+            return GetForecastRunnable(context, viewModel)
         }
     }
 }

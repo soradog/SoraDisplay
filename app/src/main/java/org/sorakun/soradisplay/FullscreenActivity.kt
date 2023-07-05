@@ -8,15 +8,16 @@ import android.os.*
 import android.view.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
 import org.sorakun.soradisplay.natureremo.*
 import org.sorakun.soradisplay.weather.*
 import java.util.*
+import kotlin.ConcurrentModificationException
 
 
 /**
@@ -25,28 +26,7 @@ import java.util.*
  */
 class FullscreenActivity : AppCompatActivity() {
 
-    class PageCountViewModel : ViewModel() {
-        private val uiState: MutableLiveData<Int?> = MutableLiveData<Int?>()
-
-        init {
-            uiState.value = 0
-        }
-
-        fun getNextPage(max : Int) : Int {
-            val current : Int = uiState.value!!
-            val result = if (current >= max) {
-                0
-            } else {
-                current + 1
-            }
-            uiState.value = result
-            return result
-        }
-    }
-
     private lateinit var binding: ActivityFullscreenBinding
-    private lateinit var fullscreenContent: ViewPager2
-    private lateinit var fragmentAdapter: FragmentAdapter
     private val hideHandler = Handler(Looper.myLooper()!!)
 
     private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
@@ -58,6 +38,7 @@ class FullscreenActivity : AppCompatActivity() {
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
+        val fullscreenContent = binding.fullscreenContent
         if (Build.VERSION.SDK_INT >= 30) {
             fullscreenContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
@@ -80,13 +61,8 @@ class FullscreenActivity : AppCompatActivity() {
     }
     private var isFullscreen: Boolean = false
     private val hideRunnable = Runnable { hide() }
-    private lateinit var forecastRunnable : GetForecastRunnableBase
-    private lateinit var devicesRunnable : DevicesRequestRunnable
 
-    private val clockFragment = ClockFragment()
-    private val todayFragment = TodayWeatherFragment()
-    private val forecastFragment = WeatherForecastFragment()
-    private val nextHoursFragment = NextFewHoursWeatherFragment()
+    private var currentPage = 0
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -121,40 +97,16 @@ class FullscreenActivity : AppCompatActivity() {
         isFullscreen = true
 
         // Set up the user interaction to manually show or hide the system UI.
-        fullscreenContent = binding.fullscreenContent
+        val fullscreenContent = binding.fullscreenContent
         fullscreenContent.setOnClickListener { toggle() }
 
-        fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
-        fragmentAdapter.addFragment(clockFragment)
-        fragmentAdapter.addFragment(todayFragment)
-        fragmentAdapter.addFragment(nextHoursFragment)
-        fragmentAdapter.addFragment(forecastFragment)
+        val fragmentAdapter = FragmentAdapter(supportFragmentManager, lifecycle)
 
         fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
         fullscreenContent.adapter = fragmentAdapter
 
-        // Schedule a timer event to auto flip through the different viewpages
-        val handler = Handler()
-        val flipPagerRunnable = Runnable {
-
-            val viewModel by viewModels<PageCountViewModel>()
-            val nextPage = viewModel.getNextPage(fragmentAdapter.itemCount - 1)
-            fullscreenContent.setCurrentItem(nextPage, false)
-        }
-
-        // repeat the page flipping on a timer
-        Timer().schedule(object : TimerTask() {
-            // task to be scheduled
-            override fun run() {
-                handler.post(flipPagerRunnable)
-            }
-        }, 20000, 20000)
-
-
-        forecastRunnable = ServiceFactory.requestRunnable(this)
-        forecastRunnable.firstRun()
-        devicesRunnable = DevicesRequestRunnable(this)
-        devicesRunnable.firstRun()
+        setupNatureRemoRestApiRunnable()
+        setupWeatherRestApiRunnable()
 
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
             registerReceiver(systemBroadcastReceiver, ifilter)
@@ -165,11 +117,47 @@ class FullscreenActivity : AppCompatActivity() {
         disableScreenSleep (isCharging)
     }
 
+    private fun setupNatureRemoRestApiRunnable() {
+        val viewModel by viewModels<DeviceRecordViewModel>()
+        val devicesRunnable = DevicesRequestRunnable(this, viewModel)
+        devicesRunnable.firstRun()
+    }
+    private fun setupWeatherRestApiRunnable() {
+        val viewModel by viewModels<ForecastRecordViewModel>()
+        val forecastRunnable = ServiceFactory.requestRunnable(this, viewModel)
+        forecastRunnable.firstRun()
+
+        // Schedule a timer event to auto flip through the different viewpages
+        val handler = Handler()
+        val flipPagerRunnable = Runnable {
+
+            if (currentPage == FragmentAdapter.MAX_FRAGMENT) {
+                currentPage = 0
+            }
+            // only auto turn to the weather pages if weather api is running
+            if (forecastRunnable.isRunning) {
+                binding.fullscreenContent.setCurrentItem(currentPage++, false)
+            }
+        }
+
+        // repeat the page flipping on a timer
+        Timer().schedule(object : TimerTask() {
+            // task to be scheduled
+            override fun run() {
+                handler.post(flipPagerRunnable)
+            }
+        }, 20000, 20000)
+    }
+
     private val preferenceListener =
         SharedPreferences.OnSharedPreferenceChangeListener { pref, tag ->
-            if (pref != null &&
-                    tag.contains("natureremo", false)) {
-                devicesRunnable.firstRun()
+            if (pref != null) {
+                if (tag.contains("natureremo", false)) {
+                    setupNatureRemoRestApiRunnable()
+                }
+                else if (tag.contains("weather", false)) {
+                    setupWeatherRestApiRunnable()
+                }
             }
         }
 
@@ -191,13 +179,6 @@ class FullscreenActivity : AppCompatActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
-
-    fun onResponseJSONArray(response: JSONArray?) {
-        if (response != null && response.length() > 0) {
-            val viewModel by viewModels<DeviceRecordViewModel>()
-            viewModel.set(response.getJSONObject(0))
         }
     }
 
@@ -231,6 +212,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     private fun show() {
+        val fullscreenContent = binding.fullscreenContent
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {
             fullscreenContent.windowInsetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())

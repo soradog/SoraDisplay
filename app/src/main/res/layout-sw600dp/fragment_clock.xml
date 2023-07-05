@@ -4,7 +4,6 @@
     android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:orientation="vertical"
     android:padding="20sp"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
@@ -46,15 +45,6 @@
         android:textColor="@color/white"
         android:textSize="20sp" />
 
-    <org.sorakun.soradisplay.natureremo.SoraDigitalClock
-        android:id="@+id/simpleDigitalClock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layerType="software"
-        android:textColor="#fff"
-        android:textSize="220sp"
-        android:textStyle="bold" />
-
     <TextView
         android:id="@+id/textDateDisplay"
         android:layout_width="match_parent"
@@ -63,6 +53,15 @@
         android:text=""
         android:textColor="@color/white"
         android:textSize="80sp" />
+
+    <org.sorakun.soradisplay.natureremo.SoraDigitalClock
+        android:id="@+id/simpleDigitalClock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layerType="software"
+        android:textColor="#fff"
+        android:textSize="220sp"
+        android:textStyle="bold" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->

@@ -18,11 +18,7 @@ import kotlin.Boolean
  */
 class WeatherForecastFragment() : Fragment() {
 
-    private val forecastAdapter = WeeklyForecastAdapter()
-
     private var visible: Boolean = false
-
-    private var fullscreenContent: View? = null
 
     private var _binding: FragmentWeatherForecastBinding? = null
 
@@ -38,6 +34,7 @@ class WeatherForecastFragment() : Fragment() {
 
         _binding = FragmentWeatherForecastBinding.inflate(inflater, container, false)
         binding.weeklyRecycler.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        val forecastAdapter = WeeklyForecastAdapter()
         binding.weeklyRecycler.adapter = forecastAdapter
 
         val viewModel by activityViewModels<ForecastRecordViewModel>()
@@ -54,8 +51,8 @@ class WeatherForecastFragment() : Fragment() {
 
         visible = true
         val parentActivity : FullscreenActivity = activity as FullscreenActivity
-        fullscreenContent = binding.fullscreenContent
-        fullscreenContent?.setOnClickListener { parentActivity.toggle() }
+        val fullscreenContent = binding.fullscreenContent
+        fullscreenContent.setOnClickListener { parentActivity.toggle() }
     }
 
     override fun onResume() {
@@ -69,11 +66,6 @@ class WeatherForecastFragment() : Fragment() {
 
         // Clear the systemUiVisibility flag
         activity?.window?.decorView?.systemUiVisibility = 0
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        fullscreenContent = null
     }
 
     override fun onDestroyView() {

@@ -1,11 +1,16 @@
 package org.sorakun.soradisplay.weather
 
+import android.content.Context
 import android.os.Handler
+import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
+import org.json.JSONArray
 import org.sorakun.soradisplay.FullscreenActivity
+import org.sorakun.soradisplay.natureremo.DeviceRecordViewModel
 
-open class GetForecastRunnableBase(private val activity: FullscreenActivity) : Runnable {
+open class GetForecastRunnableBase(context: Context, val viewModel: ForecastRecordViewModel) : Runnable {
     private val handler: Handler = Handler()
+    private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
 
     fun firstRun() {
         handler.post(this)
@@ -15,18 +20,30 @@ open class GetForecastRunnableBase(private val activity: FullscreenActivity) : R
     private var enabled: Boolean = false
     var apiKey: String? = null
     var location: String? = null
+    var isRunning = false
 
     override fun run() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
+        isRunning = if (runAllowed()) {
+            sendRequest()
+            // Repeat this the same runnable code block again another 2 seconds
+            handler.postDelayed(this, (repeatMinutes * 60 * 1000).toLong())
+        } else {
+            false
+        }
+    }
+
+    fun runAllowed() : Boolean {
         enabled = sharedPref.getBoolean("weatherapi", false)
         apiKey = sharedPref.getString("weather_sync_api_key", null)
         val syncfreq = sharedPref.getString("weather_sync_time", "10")
         location = sharedPref.getString("weather_location_name", "Tokyo")
         repeatMinutes = syncfreq!!.toInt()
-        if (enabled && apiKey != null && repeatMinutes > 0 && location != null) {
-            sendRequest()
-            // Repeat this the same runnable code block again another 2 seconds
-            handler.postDelayed(this, (repeatMinutes * 60 * 1000).toLong())
+        return (enabled && apiKey != null && repeatMinutes > 0 && location != null)
+    }
+
+    fun onResponseJSONArray(response: JSONArray?) {
+        if (response != null && response.length() > 0) {
+            viewModel.set(response.getJSONObject(0))
         }
     }
 

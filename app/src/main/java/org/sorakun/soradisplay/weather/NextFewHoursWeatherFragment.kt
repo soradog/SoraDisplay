@@ -17,11 +17,7 @@ import org.sorakun.soradisplay.databinding.FragmentNextFewHoursWeatherBinding
  */
 open class NextFewHoursWeatherFragment() : Fragment() {
 
-    private val forecastAdapter = IntraDayForecastAdapter()
-
     private var visible: Boolean = false
-
-    private var fullscreenContent: View? = null
 
     private var _binding: FragmentNextFewHoursWeatherBinding? = null
 
@@ -37,6 +33,7 @@ open class NextFewHoursWeatherFragment() : Fragment() {
 
         _binding = FragmentNextFewHoursWeatherBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        val forecastAdapter = IntraDayForecastAdapter()
         binding.recyclerView.adapter = forecastAdapter
 
         val viewModel by activityViewModels<ForecastRecordViewModel>()
@@ -54,16 +51,14 @@ open class NextFewHoursWeatherFragment() : Fragment() {
 
         visible = true
 
-        fullscreenContent = binding.fullscreenContent
+        val fullscreenContent = binding.fullscreenContent
         val parentActivity : FullscreenActivity = activity as FullscreenActivity
-        fullscreenContent?.setOnClickListener { parentActivity.toggle() }
+        fullscreenContent.setOnClickListener { parentActivity.toggle() }
     }
 
     override fun onResume() {
         super.onResume()
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-
-        binding.recyclerView.adapter = forecastAdapter
     }
 
     override fun onPause() {
@@ -72,11 +67,6 @@ open class NextFewHoursWeatherFragment() : Fragment() {
 
         // Clear the systemUiVisibility flag
         activity?.window?.decorView?.systemUiVisibility = 0
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        fullscreenContent = null
     }
 
     override fun onDestroyView() {

@@ -19,8 +19,6 @@ open class TodayWeatherFragment() : Fragment() {
 
     private var visible: Boolean = false
 
-    private var fullscreenContent: View? = null
-
     private var _binding: FragmentTodayWeatherBinding? = null
 
     // This property is only valid between onCreateView and
@@ -49,9 +47,9 @@ open class TodayWeatherFragment() : Fragment() {
 
         visible = true
 
-        fullscreenContent = binding.fullscreenContent
+        val fullscreenContent = binding.fullscreenContent
         val parentActivity : FullscreenActivity = activity as FullscreenActivity
-        fullscreenContent?.setOnClickListener { parentActivity.toggle() }
+        fullscreenContent.setOnClickListener { parentActivity.toggle() }
     }
 
     override fun onResume() {
@@ -65,11 +63,6 @@ open class TodayWeatherFragment() : Fragment() {
 
         // Clear the systemUiVisibility flag
         activity?.window?.decorView?.systemUiVisibility = 0
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        fullscreenContent = null
     }
 
     override fun onDestroyView() {

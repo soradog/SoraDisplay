@@ -1,5 +1,6 @@
 package org.sorakun.soradisplay.weather.visualcrossing
 
+import android.content.Context
 import android.util.Log
 import androidx.activity.viewModels
 import com.android.volley.Request
@@ -12,8 +13,10 @@ import org.sorakun.soradisplay.FullscreenActivity
 import org.sorakun.soradisplay.weather.ForecastRecordViewModel
 import org.sorakun.soradisplay.weather.GetForecastRunnableBase
 
-class GetForecastRunnable (private val activity: FullscreenActivity) : Runnable,
-    GetForecastRunnableBase(activity) {
+class GetForecastRunnable (context: Context, viewModel: ForecastRecordViewModel) : Runnable,
+    GetForecastRunnableBase(context, viewModel) {
+
+    private val requestQueue = Volley.newRequestQueue(context)
 
     override fun sendRequest() {
         val url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/$location?unitGroup=metric&key=$apiKey&contentType=json"
@@ -35,8 +38,7 @@ class GetForecastRunnable (private val activity: FullscreenActivity) : Runnable,
                 error
             )
         }
-        val queue = Volley.newRequestQueue(activity)
-        queue.add(request)
+        requestQueue.add(request)
     }
 
     private fun onErrorResponse(error: VolleyError?) {
@@ -44,7 +46,6 @@ class GetForecastRunnable (private val activity: FullscreenActivity) : Runnable,
     }
 
     private fun onResponseJSONObject(response: JSONObject?) {
-        val viewModel by activity.viewModels<ForecastRecordViewModel>()
         viewModel.set(response)
     }
 }

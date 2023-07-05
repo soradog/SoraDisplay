@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
     tools:context=".FullscreenActivity">
 
@@ -15,7 +14,7 @@
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true" />
+        android:clickable="false" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->

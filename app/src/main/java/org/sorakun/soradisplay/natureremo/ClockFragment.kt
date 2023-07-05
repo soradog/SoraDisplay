@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import org.sorakun.soradisplay.FullscreenActivity
@@ -22,15 +21,9 @@ class ClockFragment() : Fragment() {
 
     private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
         override fun onDayChanged(format: String) {
-            dateDisplay.text = format
+            binding.textDateDisplay.text = format
         }
     }
-
-    private var fullscreenContent: View? = null
-    private lateinit var dateDisplay: TextView
-    private lateinit var tempDisplay: TextView
-    private lateinit var humidDisplay: TextView
-    private lateinit var locationLabel: TextView
 
     private var _binding: FragmentClockBinding? = null
 
@@ -41,17 +34,17 @@ class ClockFragment() : Fragment() {
     private fun updateViews(device : DeviceRecord?) {
         if (device != null && device.isReady) {
             // update the views according to device data
-            tempDisplay.text = String.format(
+            binding.sensorTemperature.text = String.format(
                 Locale.getDefault(),
                 "%d°c", device.temperature.toInt()
             )
-            tempDisplay.setTextColor(Util.getTemperatureColor(device.temperature))
-            humidDisplay.text = String.format(
+            binding.sensorTemperature.setTextColor(Util.getTemperatureColor(device.temperature))
+            binding.sensorHumidity.text = String.format(
                 Locale.getDefault(),
                 "%d%%", device.humidity.toInt()
             )
-            humidDisplay.setTextColor(Util.getHumidityColor(device.humidity))
-            locationLabel.text = String.format(
+            binding.sensorHumidity.setTextColor(Util.getHumidityColor(device.humidity))
+            binding.remoLocation.text = String.format(
                 Locale.getDefault(), "Sensor: %s", device.name
             )
         }
@@ -77,14 +70,9 @@ class ClockFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fullscreenContent = binding.linear
-        dateDisplay = binding.textDateDisplay
-        tempDisplay = binding.sensorTemperature
-        humidDisplay = binding.sensorHumidity
-        locationLabel = binding.remoLocation
-
+        val fullscreenContent = binding.linear
         val parentActivity : FullscreenActivity = activity as FullscreenActivity
-        fullscreenContent?.setOnClickListener { parentActivity.toggle() }
+        fullscreenContent.setOnClickListener { parentActivity.toggle() }
     }
 
     override fun onResume() {
@@ -94,7 +82,7 @@ class ClockFragment() : Fragment() {
         activity?.registerReceiver(systemBroadcastReceiver,
             SystemBroadcastReceiver.getIntentFilter()
         )
-        dateDisplay.text = systemBroadcastReceiver.printDate(Date())
+        binding.textDateDisplay.text = systemBroadcastReceiver.printDate(Date())
     }
 
     override fun onPause() {
@@ -105,11 +93,6 @@ class ClockFragment() : Fragment() {
 
         // Clear the systemUiVisibility flag
         activity?.window?.decorView?.systemUiVisibility = 0
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        fullscreenContent = null
     }
 
     override fun onDestroyView() {

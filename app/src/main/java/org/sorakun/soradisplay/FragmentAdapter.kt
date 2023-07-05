@@ -1,36 +1,31 @@
-package org.sorakun.soradisplay;
+package org.sorakun.soradisplay
 
-import org.sorakun.soradisplay.natureremo.DeviceRecord;
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import org.sorakun.soradisplay.natureremo.ClockFragment
+import org.sorakun.soradisplay.weather.NextFewHoursWeatherFragment
+import org.sorakun.soradisplay.weather.TodayWeatherFragment
+import org.sorakun.soradisplay.weather.WeatherForecastFragment
 
-import java.util.ArrayList;
-import java.util.List;
+class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-
-public class FragmentAdapter extends FragmentStateAdapter {
-
-    private ArrayList<Fragment> fragmentList = new ArrayList<>();
-
-    public FragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
-        super(fragmentManager, lifecycle);
+    override fun createFragment(position: Int): Fragment {
+        var fragment : Fragment = ClockFragment()
+        when (position) {
+            1 -> fragment = TodayWeatherFragment()
+            2 -> fragment = NextFewHoursWeatherFragment()
+            3 -> fragment = WeatherForecastFragment()
+        }
+        return fragment
     }
 
-    @NonNull
-    @Override
-    public Fragment createFragment(int position) {
-        return fragmentList.get(position);
+    override fun getItemCount(): Int {
+        return MAX_FRAGMENT
     }
-
-    public void addFragment(Fragment fragment) {
-        fragmentList.add(fragment);
-    }
-
-    @Override
-    public int getItemCount() {
-        return fragmentList.size();
+    companion object {
+        const val MAX_FRAGMENT = 4
     }
 }
