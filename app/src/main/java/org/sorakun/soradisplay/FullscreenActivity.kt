@@ -5,19 +5,16 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.*
+import android.util.Log
 import android.view.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
-import org.json.JSONArray
 import org.sorakun.soradisplay.databinding.ActivityFullscreenBinding
 import org.sorakun.soradisplay.natureremo.*
 import org.sorakun.soradisplay.weather.*
 import java.util.*
-import kotlin.ConcurrentModificationException
 
 
 /**
@@ -28,10 +25,26 @@ class FullscreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFullscreenBinding
     private val hideHandler = Handler(Looper.myLooper()!!)
+    private val flipPageHandler = Handler(Looper.myLooper()!!)
+    private lateinit var forecastRunnable : GetForecastRunnableBase
+    private lateinit var devicesRunnable : DevicesRequestRunnable
+    private lateinit var timer : Timer
 
     private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
         override fun onDockOrBatteryStateChanged(isChargingOrDocked : Boolean) {
             disableScreenSleep (isChargingOrDocked)
+        }
+    }
+
+    private val flipPagerRunnable = Runnable {
+
+        Log.i("SoraDisplay", "FullscreenActivity:flipPagerRunnable: $currentPage")
+        if (currentPage == FragmentAdapter.MAX_FRAGMENT) {
+            currentPage = 0
+        }
+        // only auto turn to the weather pages if weather api is running
+        if (forecastRunnable != null && forecastRunnable.isRunning) {
+            binding.fullscreenContent.setCurrentItem(currentPage++, false)
         }
     }
 
@@ -89,6 +102,8 @@ class FullscreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        ServiceFactory.setStaticData(resources.assets)
+
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -105,9 +120,6 @@ class FullscreenActivity : AppCompatActivity() {
         fullscreenContent.orientation = ViewPager2.ORIENTATION_VERTICAL
         fullscreenContent.adapter = fragmentAdapter
 
-        setupNatureRemoRestApiRunnable()
-        setupWeatherRestApiRunnable()
-
         val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
             registerReceiver(systemBroadcastReceiver, ifilter)
         }
@@ -119,34 +131,13 @@ class FullscreenActivity : AppCompatActivity() {
 
     private fun setupNatureRemoRestApiRunnable() {
         val viewModel by viewModels<DeviceRecordViewModel>()
-        val devicesRunnable = DevicesRequestRunnable(this, viewModel)
+        devicesRunnable = DevicesRequestRunnable(this, viewModel)
         devicesRunnable.firstRun()
     }
     private fun setupWeatherRestApiRunnable() {
         val viewModel by viewModels<ForecastRecordViewModel>()
-        val forecastRunnable = ServiceFactory.requestRunnable(this, viewModel)
+        forecastRunnable = ServiceFactory.requestRunnable(this, viewModel)
         forecastRunnable.firstRun()
-
-        // Schedule a timer event to auto flip through the different viewpages
-        val handler = Handler()
-        val flipPagerRunnable = Runnable {
-
-            if (currentPage == FragmentAdapter.MAX_FRAGMENT) {
-                currentPage = 0
-            }
-            // only auto turn to the weather pages if weather api is running
-            if (forecastRunnable.isRunning) {
-                binding.fullscreenContent.setCurrentItem(currentPage++, false)
-            }
-        }
-
-        // repeat the page flipping on a timer
-        Timer().schedule(object : TimerTask() {
-            // task to be scheduled
-            override fun run() {
-                handler.post(flipPagerRunnable)
-            }
-        }, 20000, 20000)
     }
 
     private val preferenceListener =
@@ -162,15 +153,33 @@ class FullscreenActivity : AppCompatActivity() {
         }
 
     override fun onResume() {
+        Log.i("SoraDisplay", "FullscreenActivity:onResume")
         super.onResume()
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPref.registerOnSharedPreferenceChangeListener(preferenceListener)
+        setupNatureRemoRestApiRunnable()
+        setupWeatherRestApiRunnable()
+        flipPageHandler.removeCallbacks(flipPagerRunnable)
+        // Schedule a timer event to auto flip through the different viewpages
+        // repeat the page flipping on a timer
+        timer = Timer()
+        timer.schedule(object : TimerTask() {
+            // task to be scheduled
+            override fun run() {
+                flipPageHandler.post(flipPagerRunnable)
+            }
+        }, 20000, 20000)
     }
 
     override fun onPause() {
-        super.onPause()
+        Log.i("SoraDisplay", "FullscreenActivity:onPause")
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPref.registerOnSharedPreferenceChangeListener(preferenceListener)
+        flipPageHandler.removeCallbacks(flipPagerRunnable)
+        timer.cancel()
+        forecastRunnable.pause()
+        devicesRunnable.pause()
+        super.onPause()
     }
 
     private fun disableScreenSleep(chargingOrDocking : Boolean) {

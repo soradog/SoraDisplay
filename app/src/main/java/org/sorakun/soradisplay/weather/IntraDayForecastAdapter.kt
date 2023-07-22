@@ -41,7 +41,7 @@ class IntraDayForecastAdapter :
             try {
                 datetime.text = parser.parse(hour.datetime)?.let { printer.format(it) }
             } catch (e: ParseException) {
-                Log.e("IntraDayForecastAdapter", "Unable to parse date: " + hour.datetime)
+                Log.e("SoraDisplay", "IntraDayForecastAdapter:Unable to parse date: " + hour.datetime)
             }
             ServiceFactory.setIcon(context, hour.icon, icon)
             data1.text = Util.printF("%d°", hour.temp.toInt())

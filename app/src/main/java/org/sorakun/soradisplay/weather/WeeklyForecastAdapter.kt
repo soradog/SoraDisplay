@@ -42,7 +42,7 @@ class WeeklyForecastAdapter () :
             try {
                 date.text = parser.parse(fd.datetime)?.let { printer.format(it) }
             } catch (e: ParseException) {
-                Log.e("WeeklyForecastAdapter", "Unable to parse ${fd.datetime}")
+                Log.e("SoraDisplay", "WeeklyForecastAdapter: Unable to parse ${fd.datetime}")
             }
             ServiceFactory.setIcon(icon.context, fd.icon, icon)
             data1.text = Util.printF("%d°", fd.tempmax.toInt())

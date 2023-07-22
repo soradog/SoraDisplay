@@ -79,6 +79,7 @@ open class TodayWeatherFragment() : Fragment() {
         binding.currentIcon.adjustViewBounds = true
         binding.currentIcon.minimumWidth = 60
         binding.currentIcon.minimumHeight = 60
+        binding.lastupdated.text = currentConditions.datetime
         //new Util.DownloadImageTask(binding.currentIcon).execute(current.condition.icon);
         ServiceFactory.setIcon(context, currentConditions.icon, binding.currentIcon)
         binding.label1.text = "Feels:"

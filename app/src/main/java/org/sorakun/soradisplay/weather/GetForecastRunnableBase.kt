@@ -2,11 +2,8 @@ package org.sorakun.soradisplay.weather
 
 import android.content.Context
 import android.os.Handler
-import androidx.activity.viewModels
 import androidx.preference.PreferenceManager
 import org.json.JSONArray
-import org.sorakun.soradisplay.FullscreenActivity
-import org.sorakun.soradisplay.natureremo.DeviceRecordViewModel
 
 open class GetForecastRunnableBase(context: Context, val viewModel: ForecastRecordViewModel) : Runnable {
     private val handler: Handler = Handler()
@@ -16,7 +13,11 @@ open class GetForecastRunnableBase(context: Context, val viewModel: ForecastReco
         handler.post(this)
     }
 
-    private var repeatMinutes: Int = 0
+    fun pause() {
+        handler.removeCallbacks(this)
+    }
+
+    private var repeatMinutes: Int = 20
     private var enabled: Boolean = false
     var apiKey: String? = null
     var location: String? = null
@@ -35,7 +36,7 @@ open class GetForecastRunnableBase(context: Context, val viewModel: ForecastReco
     fun runAllowed() : Boolean {
         enabled = sharedPref.getBoolean("weatherapi", false)
         apiKey = sharedPref.getString("weather_sync_api_key", null)
-        val syncfreq = sharedPref.getString("weather_sync_time", "10")
+        val syncfreq = sharedPref.getString("weather_sync_time", "20")
         location = sharedPref.getString("weather_location_name", "Tokyo")
         repeatMinutes = syncfreq!!.toInt()
         return (enabled && apiKey != null && repeatMinutes > 0 && location != null)
