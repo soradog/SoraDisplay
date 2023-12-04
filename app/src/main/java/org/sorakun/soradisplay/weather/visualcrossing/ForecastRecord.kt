@@ -194,11 +194,11 @@ data class ForecastRecord (
             @Json(name = "pressure")
             var pressure: Double = 0.0, // 1005.2
             @Json(name = "severerisk")
-            var severerisk: Int = 0, // 10
+            var severerisk: Double = 0.0, // 10
             @Json(name = "snow")
-            var snow: Int = 0, // 0
+            var snow: Double = 0.0, // 0
             @Json(name = "snowdepth")
-            var snowdepth: Int = 0, // 0
+            var snowdepth: Double = 0.0, // 0
             @Json(name = "solarenergy")
             var solarenergy: Double = 0.0, // 0.4
             @Json(name = "solarradiation")
@@ -208,7 +208,7 @@ data class ForecastRecord (
             @Json(name = "temp")
             override var temp: Double = 0.0, // 19.3
             @Json(name = "uvindex")
-            var uvindex: Int = 0, // 0
+            var uvindex: Double = 0.0, // 0
             @Json(name = "visibility")
             var visibility: Double = 0.0, // 10.7
             @Json(name = "winddir")
