@@ -27,10 +27,10 @@ class DevicesRequestRunnable(context: Context, private val viewModel: DeviceReco
 
     override fun run() {
         val enabled = sharedPref.getBoolean("natureremo", false)
-        val apiKey = sharedPref.getString("natureremo_sync_api_key", null)
+        //val apiKey = sharedPref.getString("natureremo_sync_api_key", null)
         val value = sharedPref.getString("natureremo_sync_time", "5")
         val repeatMinutes = value!!.toInt()
-        if (enabled && apiKey != null && repeatMinutes > 0) {
+        if (enabled && repeatMinutes > 0) {
             sendRequest()
             // Repeat this the same runnable code block again another 2 seconds
             handler.postDelayed(this, (repeatMinutes * 60 * 1000).toLong())
@@ -38,7 +38,7 @@ class DevicesRequestRunnable(context: Context, private val viewModel: DeviceReco
     }
 
     private fun sendRequest() {
-        val url = "https://api.nature.global/1/devices"
+        val url = "http://raspberrypi:7000/sensor"
 
         Log.i("SoraDisplay", "DevicesRequestRunnable:sendRequest")
         //creating json request for the NatureRemo sensor
@@ -49,13 +49,6 @@ class DevicesRequestRunnable(context: Context, private val viewModel: DeviceReco
             Response.Listener { response: JSONArray? -> onResponseJSONArray(response) },
             this
         ) {
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                val apiKey = sharedPref.getString("natureremo_sync_api_key", "")
-                //params.put("Authorization", "Bearer VO-oNV-ZqrpaVXHXny3hO6vWgcR7wY7a4jQseo82EpE.f0M8KiqPvKSjv8EJL3KXIyf4MnurGdZDnq0naJmlg8M");
-                params["Authorization"] = "Bearer $apiKey"
-                return params
-            }
         }
         requestQueue.add(request)
     }

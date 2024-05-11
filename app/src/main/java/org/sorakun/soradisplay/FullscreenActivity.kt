@@ -32,6 +32,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     private val systemBroadcastReceiver = object : SystemBroadcastReceiver() {
         override fun onDockOrBatteryStateChanged(isChargingOrDocked : Boolean) {
+            Log.i("SoraDisplay", "FullscreenActivity:onDockOrBatteryStateChanged")
             disableScreenSleep (isChargingOrDocked)
         }
     }
@@ -50,6 +51,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
+        Log.i("SoraDisplay", "FullscreenActivity:hidePart2Runnable")
         // Delayed removal of status and navigation bar
         val fullscreenContent = binding.fullscreenContent
         if (Build.VERSION.SDK_INT >= 30) {
@@ -78,12 +80,14 @@ class FullscreenActivity : AppCompatActivity() {
     private var currentPage = 0
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        Log.i("SoraDisplay", "FullscreenActivity:onCreateOptionsMenu")
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.i("SoraDisplay", "FullscreenActivity:onOptionsItemSelected")
         when (item.itemId) {
             android.R.id.home -> {
                 hide()
@@ -100,6 +104,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("SoraDisplay", "FullscreenActivity:onCreate")
         super.onCreate(savedInstanceState)
 
         ServiceFactory.setStaticData(resources.assets)
@@ -130,11 +135,13 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     private fun setupNatureRemoRestApiRunnable() {
+        Log.i("SoraDisplay", "FullscreenActivity:setupNatureRemoRestApiRunnable")
         val viewModel by viewModels<DeviceRecordViewModel>()
         devicesRunnable = DevicesRequestRunnable(this, viewModel)
         devicesRunnable.firstRun()
     }
     private fun setupWeatherRestApiRunnable() {
+        Log.i("SoraDisplay", "FullscreenActivity:setupWeatherRestApiRunnable")
         val viewModel by viewModels<ForecastRecordViewModel>()
         forecastRunnable = ServiceFactory.requestRunnable(this, viewModel)
         forecastRunnable.firstRun()
@@ -142,6 +149,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     private val preferenceListener =
         SharedPreferences.OnSharedPreferenceChangeListener { pref, tag ->
+            Log.i("SoraDisplay", "FullscreenActivity:OnSharedPreferenceChangeListener")
             if (pref != null) {
                 if (tag.contains("natureremo", false)) {
                     setupNatureRemoRestApiRunnable()
@@ -183,6 +191,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     private fun disableScreenSleep(chargingOrDocking : Boolean) {
+        Log.i("SoraDisplay", "FullscreenActivity:disableScreenSleep")
         if (chargingOrDocking) {
             // prevent screen going to sleep if device is charging
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -192,6 +201,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
+        Log.i("SoraDisplay", "FullscreenActivity:onPostCreate")
         super.onPostCreate(savedInstanceState)
 
         // Trigger the initial hide() shortly after the activity has been
@@ -202,6 +212,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     fun toggle() {
+        Log.i("SoraDisplay", "FullscreenActivity:toggle")
         if (isFullscreen) {
             hide()
         } else {
@@ -210,6 +221,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     private fun hide() {
+        Log.i("SoraDisplay", "FullscreenActivity:hide")
         // Hide UI first
         supportActionBar?.hide()
         //fullscreenContentControls.visibility = View.GONE
@@ -221,6 +233,7 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     private fun show() {
+        Log.i("SoraDisplay", "FullscreenActivity:show")
         val fullscreenContent = binding.fullscreenContent
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {
@@ -242,6 +255,7 @@ class FullscreenActivity : AppCompatActivity() {
      * previously scheduled calls.
      */
     private fun delayedHide(delayMillis: Int) {
+        Log.i("SoraDisplay", "FullscreenActivity:delayedHide")
         hideHandler.removeCallbacks(hideRunnable)
         hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
     }

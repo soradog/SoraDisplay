@@ -39,7 +39,7 @@ open class GetForecastRunnableBase(context: Context, val viewModel: ForecastReco
         val syncfreq = sharedPref.getString("weather_sync_time", "20")
         location = sharedPref.getString("weather_location_name", "Tokyo")
         repeatMinutes = syncfreq!!.toInt()
-        return (enabled && apiKey != null && repeatMinutes > 0 && location != null)
+        return (enabled && repeatMinutes > 0)
     }
 
     fun onResponseJSONArray(response: JSONArray?) {
