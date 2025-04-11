@@ -19,7 +19,7 @@ open class GetForecastRunnableBase(context: Context, val viewModel: ForecastReco
 
     private var repeatMinutes: Int = 20
     private var enabled: Boolean = false
-    var apiKey: String? = null
+    var server: String? = null
     var location: String? = null
     var isRunning = false
 
@@ -33,9 +33,9 @@ open class GetForecastRunnableBase(context: Context, val viewModel: ForecastReco
         }
     }
 
-    fun runAllowed() : Boolean {
+    private fun runAllowed() : Boolean {
         enabled = sharedPref.getBoolean("weatherapi", false)
-        apiKey = sharedPref.getString("weather_sync_api_key", null)
+        server = sharedPref.getString("weather_server_name", null)
         val syncfreq = sharedPref.getString("weather_sync_time", "20")
         location = sharedPref.getString("weather_location_name", "Tokyo")
         repeatMinutes = syncfreq!!.toInt()

@@ -27,7 +27,6 @@ class DevicesRequestRunnable(context: Context, private val viewModel: DeviceReco
 
     override fun run() {
         val enabled = sharedPref.getBoolean("natureremo", false)
-        //val apiKey = sharedPref.getString("natureremo_sync_api_key", null)
         val value = sharedPref.getString("natureremo_sync_time", "5")
         val repeatMinutes = value!!.toInt()
         if (enabled && repeatMinutes > 0) {
@@ -38,7 +37,8 @@ class DevicesRequestRunnable(context: Context, private val viewModel: DeviceReco
     }
 
     private fun sendRequest() {
-        val url = "http://raspberrypi:7000/sensor"
+        val server = sharedPref.getString("natureremo_sync_server_name", null)
+        val url = "http://$server:7000/sensor"
 
         Log.i("SoraDisplay", "DevicesRequestRunnable:sendRequest")
         //creating json request for the NatureRemo sensor

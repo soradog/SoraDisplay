@@ -27,9 +27,9 @@
 
     <EditTextPreference
         app:dependency="weatherapi"
-        app:key="weather_sync_api_key"
-        app:title="@string/weather_api_sync_key"
-        app:summary="@string/weather_api_sync_key_summary"
+        app:key="weather_server_name"
+        app:title="@string/weather_server_name_title"
+        app:summary="@string/weather_server_name_summary"
         />
 
 </PreferenceScreen>

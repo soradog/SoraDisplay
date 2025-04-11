@@ -20,9 +20,9 @@
 
     <EditTextPreference
         app:dependency="natureremo"
-        app:key="natureremo_sync_api_key"
-        app:title="@string/natureremo_api_sync_key"
-        app:summary="@string/natureremo_api_sync_key_summary"
+        app:key="natureremo_sync_server_name"
+        app:title="@string/natureremo_server_name_title"
+        app:summary="@string/natureremo_server_name_summary"
         />
 
 </PreferenceScreen>

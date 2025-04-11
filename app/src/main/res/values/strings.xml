@@ -32,8 +32,8 @@
     <string name="natureremo_api_enable_summary_off">NatureRemo query disabled</string>
     <string name="natureremo_api_sync_mins">RestAPI sync period (minutes)</string>
     <string name="natureremo_api_sync_mins_summary">Frequency to query the NatureRemo RestAPI, in minutes</string>
-    <string name="natureremo_api_sync_key">RestAPI sync key</string>
-    <string name="natureremo_api_sync_key_summary">Get your own free key at https://home.nature.global/</string>
+    <string name="natureremo_server_name_title">Server name for sensor info</string>
+    <string name="natureremo_server_name_summary">Server name for sensor info/</string>
 
     <!-- Weather Preferences -->
     <string name="weather_preference">Weather preferences</string>
@@ -42,8 +42,8 @@
     <string name="weather_api_enable_summary_off">Weather info disabled</string>
     <string name="weather_api_sync_mins">Weather API sync period (minutes)</string>
     <string name="weather_api_sync_mins_summary">Frequency to download weather info, in minutes</string>
-    <string name="weather_api_sync_key">Weather API sync key</string>
-    <string name="weather_api_sync_key_summary">Get your own free key at https://www.visualcrossing.com/</string>
+    <string name="weather_server_name_title">Weather data server name</string>
+    <string name="weather_server_name_summary">Weather data server name</string>
     <string name="weather_api_location_name">Name of location for weather info</string>
     <string name="weather_api_location_name_summary">Enter name of city in order to download weather info</string>
 
