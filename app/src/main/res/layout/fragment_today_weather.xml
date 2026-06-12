@@ -35,7 +35,7 @@
         tools:textSize="32sp" />
 
     <!-- Main Content -->
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/currentIcon"
         android:layout_width="@dimen/today_weather_icon_size"
         android:layout_height="@dimen/today_weather_icon_size"
@@ -46,7 +46,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/soraDigitalClock"
-        tools:src="@drawable/visualcrossing_clear_day" />
+        tools:srcCompat="@drawable/visualcrossing_clear_day" />
 
     <LinearLayout
         android:id="@+id/tempContainer"

@@ -22,7 +22,7 @@
         android:textSize="@dimen/weather_location_text_size"
         tools:text="12:00" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/weather_full_icon"
         android:layout_width="@dimen/weather_icon_size"
         android:layout_height="@dimen/weather_icon_size"
@@ -30,7 +30,7 @@
         android:layout_marginBottom="12dp"
         android:contentDescription="@string/weather_icon_description"
         android:scaleType="fitCenter"
-        tools:src="@drawable/visualcrossing_clear_day" />
+        tools:srcCompat="@drawable/visualcrossing_clear_day" />
 
     <TextView
         android:id="@+id/weather_full_value1"
@@ -50,7 +50,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/weather_icon_v2"
             android:layout_width="16dp"
             android:layout_height="16dp"
@@ -58,7 +58,7 @@
             android:layout_marginRight="4dp"
             android:alpha="0.8"
             android:contentDescription="@null"
-            android:src="@drawable/baseline_water_drop_24"
+            app:srcCompat="@drawable/baseline_water_drop_24"
             app:tint="@color/white" />
 
         <TextView
@@ -79,7 +79,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/weather_icon_v3"
             android:layout_width="16dp"
             android:layout_height="16dp"
@@ -87,7 +87,7 @@
             android:layout_marginRight="4dp"
             android:alpha="0.8"
             android:contentDescription="@null"
-            android:src="@drawable/visualcrossing_wind"
+            app:srcCompat="@drawable/visualcrossing_wind"
             app:tint="@color/white" />
 
         <TextView
