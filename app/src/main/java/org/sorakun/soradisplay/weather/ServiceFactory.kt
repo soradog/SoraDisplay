@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.widget.ImageView
 import com.squareup.moshi.Moshi
-import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import org.sorakun.soradisplay.weather.visualcrossing.ForecastRecord
 import org.sorakun.soradisplay.weather.visualcrossing.GetForecastRunnable
@@ -30,10 +29,13 @@ class ServiceFactory {
         }
 
         fun setIcon(c: Context?, name: String, icon: ImageView?) {
+            if (icon == null) return
+            val context = c ?: icon.context
             val resname = name.replace("-", "_")
-            val resid = icon?.resources?.getIdentifier("visualcrossing_$resname", "drawable", c?.packageName)
-            if (resid != null && resid != 0) {
-                Picasso.get().load(resid).into(icon)
+            val resid = context.resources.getIdentifier("visualcrossing_$resname", "drawable", context.packageName)
+            if (resid != 0) {
+                val drawable = androidx.appcompat.content.res.AppCompatResources.getDrawable(context, resid)
+                icon.setImageDrawable(drawable)
             }
         }
 
@@ -68,10 +70,13 @@ class ServiceFactory {
         }
 
         fun setIcon(c: Context?, name: String, icon: ImageView?) {
+            if (icon == null) return
+            val context = c ?: icon.context
             val resname = name.replace("-", "_")
-            val resid = icon?.resources?.getIdentifier("visualcrossing_$resname", "drawable", c?.packageName)
-            if (resid != null && resid != 0) {
-                Picasso.get().load(resid).into(icon)
+            val resid = context.resources.getIdentifier("visualcrossing_$resname", "drawable", context.packageName)
+            if (resid != 0) {
+                val drawable = androidx.appcompat.content.res.AppCompatResources.getDrawable(context, resid)
+                icon.setImageDrawable(drawable)
             }
         }
 

@@ -24,6 +24,8 @@ class IntraDayForecastAdapter :
         private val data1 : TextView
         private val data2 : TextView
         private val data3 : TextView
+        private val iconV2 : ImageView
+        private val iconV3 : ImageView
         private val context : Context
 
         init {
@@ -32,6 +34,8 @@ class IntraDayForecastAdapter :
             data1 = view.findViewById(R.id.weather_full_value1)
             data2 = view.findViewById(R.id.weather_full_value2)
             data3 = view.findViewById(R.id.weather_full_value3)
+            iconV2 = view.findViewById(R.id.weather_icon_v2)
+            iconV3 = view.findViewById(R.id.weather_icon_v3)
             context = view.context
         }
 
@@ -44,10 +48,17 @@ class IntraDayForecastAdapter :
                 Log.e("SoraDisplay", "IntraDayForecastAdapter:Unable to parse date: " + hour.datetime)
             }
             ServiceFactory.setIcon(context, hour.icon, icon)
+            
             data1.text = Util.printF("%d°", hour.temp.toInt())
             data1.setTextColor(Util.getTemperatureColor(hour.temp))
+            
+            // For intraday, value 2 is rain probability
+            iconV2.setImageResource(R.drawable.baseline_water_drop_24)
             data2.text = Util.printF("%d%%", hour.precipprob.toInt())
             data2.setTextColor(Util.getChanceOfRainColor(hour.precipprob))
+            
+            // For intraday, value 3 is wind speed
+            iconV3.setImageResource(R.drawable.visualcrossing_wind)
             data3.text = Util.printF("%dkm", hour.windspeed.toInt())
         }
     }

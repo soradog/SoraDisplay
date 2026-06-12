@@ -5,51 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20sp"
+    android:padding="24dp"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
-    tools:context=".weather.TodayWeatherFragment">
+    tools:context=".weather.NextFewHoursWeatherFragment">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:padding="20sp"
-        android:paddingTop="40sp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/nextFewHoursLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/soraDigitalClock"
+            android:layout_toLeftOf="@+id/soraDigitalClock"
             android:text="@string/weather_label_next_few_hours"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
         <org.sorakun.soradisplay.natureremo.SoraDigitalClock
             android:id="@+id/soraDigitalClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minEms="3"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:alpha="0.8"
+            android:textSize="32sp" />
 
-    </TableRow>
+    </RelativeLayout>
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
 
 </LinearLayout>

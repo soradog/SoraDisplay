@@ -23,8 +23,8 @@ class WeeklyForecastAdapter () :
         private val data1 : TextView
         private val data2 : TextView
         private val data3 : TextView
-        //private val data4 : TextView
-        //private val data5 : TextView
+        private val iconV2 : ImageView
+        private val iconV3 : ImageView
 
         init {
             date = view.findViewById(R.id.weather_full_datetime)
@@ -32,8 +32,8 @@ class WeeklyForecastAdapter () :
             data1 = view.findViewById(R.id.weather_full_value1)
             data2 = view.findViewById(R.id.weather_full_value2)
             data3 = view.findViewById(R.id.weather_full_value3)
-            //data4 = view.findViewById(R.id.weather_full_value4)
-            //data5 = view.findViewById(R.id.weather_full_value5)
+            iconV2 = view.findViewById(R.id.weather_icon_v2)
+            iconV3 = view.findViewById(R.id.weather_icon_v3)
         }
 
         fun bind(fd : ForecastRecordBase.DayBase) {
@@ -45,10 +45,17 @@ class WeeklyForecastAdapter () :
                 Log.e("SoraDisplay", "WeeklyForecastAdapter: Unable to parse ${fd.datetime}")
             }
             ServiceFactory.setIcon(icon.context, fd.icon, icon)
+            
             data1.text = Util.printF("%d°", fd.tempmax.toInt())
             data1.setTextColor(Util.getTemperatureColor(fd.tempmax))
+            
+            // For weekly, value 2 is min temp
+            iconV2.setImageResource(R.drawable.baseline_thermostat_24)
             data2.text = Util.printF("%d°", fd.tempmin.toInt())
             data2.setTextColor(Util.getTemperatureColor(fd.tempmin))
+            
+            // For weekly, value 3 is precipitation
+            iconV3.setImageResource(R.drawable.baseline_water_drop_24)
             data3.text = Util.printF("%d%%", fd.precipprob.toInt())
             data3.setTextColor(Util.getChanceOfRainColor(fd.precipprob))
         }

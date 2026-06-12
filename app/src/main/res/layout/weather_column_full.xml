@@ -1,58 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/weathercolumn"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:background="@drawable/weather_item_glass_bg"
+    android:gravity="center_horizontal"
+    android:minWidth="160dp"
     android:orientation="vertical"
-    android:padding="20sp">
+    android:padding="16dp">
 
-        <TextView
-            android:id="@+id/weather_full_datetime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/weather_label_fetching"
-            android:textColor="@color/gray_600"
-            android:textSize="50sp" />
+    <TextView
+        android:id="@+id/weather_full_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        tools:text="12:00" />
+
+    <ImageView
+        android:id="@+id/weather_full_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@string/weather_icon_description"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/visualcrossing_clear_day" />
+
+    <TextView
+        android:id="@+id/weather_full_value1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        tools:text="24°" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/weather_full_icon"
-            android:layout_width="match_parent"
-            android:layout_height="70sp"
-            android:layout_weight="1"
-            android:contentDescription="@string/weather_icon_description"
-            android:scaleType="fitCenter" />
-
-        <TextView
-            android:id="@+id/weather_full_value1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/weather_label_fetching"
-            android:textColor="@color/white"
-            android:textSize="70sp" />
+            android:id="@+id/weather_icon_v2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:alpha="0.8"
+            android:contentDescription="@null"
+            android:src="@drawable/baseline_water_drop_24"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/weather_full_value2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:alpha="0.8"
             android:gravity="center"
-            android:text="@string/weather_label_fetching"
             android:textColor="@color/white"
-            android:textSize="70sp" />
+            android:textSize="20sp"
+            tools:text="10%" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/weather_icon_v3"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:alpha="0.8"
+            android:contentDescription="@null"
+            android:src="@drawable/visualcrossing_wind"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/weather_full_value3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:alpha="0.8"
             android:gravity="center"
-            android:text="@string/weather_label_fetching"
             android:textColor="@color/white"
-            android:textSize="70sp" />
-
+            android:textSize="20sp"
+            tools:text="15km" />
+    </LinearLayout>
 
 </LinearLayout>

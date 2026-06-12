@@ -5,41 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20sp"
+    android:padding="24dp"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
     tools:context=".weather.WeatherForecastFragment">
 
-    <TableRow
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <org.sorakun.soradisplay.natureremo.SoraDigitalClock
-            android:id="@+id/soraDigitalClock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minEms="6"
-            android:textColor="@color/white"
-            android:textSize="60sp" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/weekLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/soraDigitalClock"
+            android:layout_toLeftOf="@+id/soraDigitalClock"
             android:text="@string/weather_label_next_few_days"
             android:textColor="@color/white"
-            android:textSize="60sp" />
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-    </TableRow>
+        <org.sorakun.soradisplay.natureremo.SoraDigitalClock
+            android:id="@+id/soraDigitalClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:alpha="0.8"
+            android:textSize="32sp" />
 
-    <LinearLayout
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weeklyRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/weeklyRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
 
 </LinearLayout>
