@@ -1,108 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fullscreenContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="@dimen/clock_padding"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
     tools:context=".weather.TodayWeatherFragment">
 
     <!-- Header -->
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/dayLocation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp">
+        android:textColor="@color/white"
+        android:textSize="@dimen/weather_location_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/soraDigitalClock"
+        app:layout_constraintEnd_toStartOf="@+id/soraDigitalClock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/soraDigitalClock"
+        tools:text="San Francisco" />
 
-        <TextView
-            android:id="@+id/dayLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/soraDigitalClock"
-            android:layout_toLeftOf="@+id/soraDigitalClock"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            tools:text="San Francisco" />
-
-        <org.sorakun.soradisplay.natureremo.SoraDigitalClock
-            android:id="@+id/soraDigitalClock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:alpha="0.8"
-            android:textSize="32sp" />
-    </RelativeLayout>
+    <org.sorakun.soradisplay.natureremo.SoraDigitalClock
+        android:id="@+id/soraDigitalClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"
+        android:textColor="@color/white"
+        android:textSize="@dimen/location_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="32sp" />
 
     <!-- Main Content -->
+    <ImageView
+        android:id="@+id/currentIcon"
+        android:layout_width="@dimen/weather_icon_size"
+        android:layout_height="@dimen/weather_icon_size"
+        android:contentDescription="@string/weather_icon_description"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/detailsCard"
+        app:layout_constraintEnd_toStartOf="@+id/tempContainer"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/soraDigitalClock"
+        tools:src="@drawable/visualcrossing_clear_day" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:id="@+id/tempContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/currentIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/currentIcon"
+        app:layout_constraintTop_toTopOf="@+id/currentIcon">
 
-        <ImageView
-            android:id="@+id/currentIcon"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:contentDescription="@string/weather_icon_description"
-            android:scaleType="fitCenter"
-            tools:src="@drawable/visualcrossing_clear_day" />
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/weather_temp_text_size"
+            android:textStyle="bold"
+            tools:text="22°" />
 
-            <TextView
-                android:id="@+id/temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:textColor="@color/white"
-                android:textSize="140sp"
-                android:textStyle="bold"
-                tools:text="22°" />
+        <TextView
+            android:id="@+id/condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:textColor="@color/white"
+            android:textSize="@dimen/weather_condition_text_size"
+            tools:text="Partly Cloudy" />
 
-            <TextView
-                android:id="@+id/condition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.9"
-                android:textColor="@color/white"
-                android:textSize="32sp"
-                tools:text="Partly Cloudy" />
-
-            <TextView
-                android:id="@+id/lastupdated"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:alpha="0.5"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                tools:text="Updated at 10:00 AM" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/lastupdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:alpha="0.5"
+            android:textColor="@color/white"
+            android:textSize="@dimen/weather_update_text_size"
+            tools:text="Updated at 10:00 AM" />
     </LinearLayout>
 
     <!-- Details Card -->
     <LinearLayout
+        android:id="@+id/detailsCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:background="@drawable/weather_item_glass_bg"
         android:orientation="horizontal"
-        android:padding="24dp">
+        android:padding="@dimen/weather_details_card_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -118,7 +116,7 @@
                 android:alpha="0.6"
                 android:text="@string/weather_feels_like_label"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="@dimen/weather_detail_label_text_size"
                 android:textStyle="bold" />
 
             <TextView
@@ -127,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/white"
-                android:textSize="28sp"
+                android:textSize="@dimen/weather_detail_value_text_size"
                 tools:text="24°" />
         </LinearLayout>
 
@@ -152,7 +150,7 @@
                 android:alpha="0.6"
                 android:text="@string/weather_humidity_label"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="@dimen/weather_detail_label_text_size"
                 android:textStyle="bold" />
 
             <TextView
@@ -161,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/white"
-                android:textSize="28sp"
+                android:textSize="@dimen/weather_detail_value_text_size"
                 tools:text="45%" />
         </LinearLayout>
 
@@ -186,7 +184,7 @@
                 android:alpha="0.6"
                 android:text="@string/weather_windspeed_label"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="@dimen/weather_detail_label_text_size"
                 android:textStyle="bold" />
 
             <TextView
@@ -195,10 +193,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/white"
-                android:textSize="28sp"
+                android:textSize="@dimen/weather_detail_value_text_size"
                 tools:text="12km/h" />
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

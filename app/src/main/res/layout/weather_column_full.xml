@@ -10,7 +10,7 @@
     android:gravity="center_horizontal"
     android:minWidth="160dp"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/weather_details_card_padding">
 
     <TextView
         android:id="@+id/weather_full_datetime"
@@ -19,13 +19,13 @@
         android:alpha="0.7"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="@dimen/weather_location_text_size"
         tools:text="12:00" />
 
     <ImageView
         android:id="@+id/weather_full_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/weather_icon_size"
+        android:layout_height="@dimen/weather_icon_size"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:contentDescription="@string/weather_icon_description"
@@ -39,7 +39,7 @@
         android:gravity="center"
         android:includeFontPadding="false"
         android:textColor="@color/white"
-        android:textSize="48sp"
+        android:textSize="@dimen/weather_temp_text_size"
         android:textStyle="bold"
         tools:text="24°" />
 
@@ -68,7 +68,7 @@
             android:alpha="0.8"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="@dimen/weather_detail_value_text_size"
             tools:text="10%" />
     </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:alpha="0.8"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="@dimen/weather_detail_value_text_size"
             tools:text="15km" />
     </LinearLayout>
 

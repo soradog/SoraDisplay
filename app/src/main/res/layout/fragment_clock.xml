@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="@dimen/clock_padding"
     android:theme="@style/ThemeOverlay.SoraDisplay.FullscreenContainer"
     tools:context=".natureremo.ClockFragment">
 
     <!-- Sensor Data Card -->
     <LinearLayout
+        android:id="@+id/sensorCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/weather_item_glass_bg"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="@dimen/sensor_card_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/sensorTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="32sp"
+            android:textSize="@dimen/sensor_text_size"
             android:textStyle="bold"
             tools:text="24.5°" />
 
         <View
+            android:id="@+id/sensorDivider"
             android:layout_width="1dp"
-            android:layout_height="24dp"
+            android:layout_height="@dimen/sensor_divider_height"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:alpha="0.2"
             android:background="@color/white" />
 
@@ -40,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/light_blue_400"
-            android:textSize="32sp"
+            android:textSize="@dimen/sensor_text_size"
             tools:text="50%" />
 
     </LinearLayout>
@@ -52,38 +58,54 @@
         android:layout_marginTop="8dp"
         android:alpha="0.7"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="@dimen/location_text_size"
+        app:layout_constraintStart_toStartOf="@+id/sensorCard"
+        app:layout_constraintTop_toBottomOf="@+id/sensorCard"
         tools:text="Living Room" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <!-- Center content area -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_h_45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
 
     <TextView
         android:id="@+id/textDateDisplay"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:alpha="0.8"
         android:gravity="center"
         android:textColor="@color/white"
-        android:alpha="0.8"
-        android:textSize="40sp"
+        app:autoSizeMaxTextSize="80sp"
+        app:autoSizeMinTextSize="8sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/simpleDigitalClock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remoLocation"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Monday, Oct 23" />
 
     <org.sorakun.soradisplay.natureremo.SoraDigitalClock
         android:id="@+id/simpleDigitalClock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center"
         android:layerType="software"
         android:textColor="@color/white"
-        android:textSize="160sp"
         android:textStyle="bold"
+        app:autoSizeMaxTextSize="300sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDateDisplay"
         tools:text="12:00" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
