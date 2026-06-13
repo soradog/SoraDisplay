@@ -50,9 +50,10 @@ class WeeklyForecastAdapter () :
             data1.setTextColor(Util.getTemperatureColor(fd.tempmax))
             
             // For weekly, value 2 is min temp
-            iconV2.setImageResource(R.drawable.baseline_thermostat_24)
+            iconV2.visibility = View.GONE
             data2.text = Util.printF("%d°", fd.tempmin.toInt())
             data2.setTextColor(Util.getTemperatureColor(fd.tempmin))
+            data2.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, data2.resources.getDimension(R.dimen.weather_detail_temp_text_size))
             
             // For weekly, value 3 is precipitation
             iconV3.setImageResource(R.drawable.baseline_water_drop_24)

@@ -3,28 +3,30 @@
     <!-- Base tier: Improved for 7-inch tablets (Fire 7) -->
     <dimen name="clock_padding">16dp</dimen>
     <dimen name="sensor_card_padding">12dp</dimen>
-    <dimen name="sensor_text_size">35sp</dimen>
+    <dimen name="sensor_text_size">42sp</dimen>
     <dimen name="location_text_size">22sp</dimen>
-    <dimen name="date_text_size">41sp</dimen>
+    <dimen name="date_text_size">49sp</dimen>
     <dimen name="clock_text_size">120sp</dimen>
     <dimen name="sensor_divider_height">18dp</dimen>
 
     <dimen name="weather_header_margin_bottom">16dp</dimen>
     <dimen name="weather_icon_size">112dp</dimen>
-    <dimen name="weather_temp_text_size">72sp</dimen>
+    <dimen name="weather_temp_text_size">48sp</dimen>
     <dimen name="weather_condition_text_size">24sp</dimen>
     <dimen name="weather_details_card_margin_top">16dp</dimen>
     <dimen name="weather_details_card_padding">16dp</dimen>
     <dimen name="weather_detail_label_text_size">12sp</dimen>
-    <dimen name="weather_detail_value_text_size">24sp</dimen>
+    <dimen name="weather_detail_value_text_size">35sp</dimen>
+    <dimen name="weather_detail_temp_text_size">48sp</dimen>
     <dimen name="weather_location_text_size">28sp</dimen>
 
     <!-- Today Weather specific (larger) -->
-    <dimen name="today_weather_temp_text_size">110sp</dimen>
-    <dimen name="today_weather_condition_text_size">31sp</dimen>
+    <dimen name="today_weather_temp_text_size">132sp</dimen>
+    <dimen name="today_weather_condition_text_size">37sp</dimen>
     <dimen name="today_weather_detail_label_text_size">19sp</dimen>
-    <dimen name="today_weather_detail_value_text_size">35sp</dimen>
+    <dimen name="today_weather_detail_value_text_size">42sp</dimen>
     <dimen name="today_weather_location_text_size">30sp</dimen>
+    <dimen name="today_weather_clock_text_size">26sp</dimen>
     <dimen name="today_weather_icon_size">168dp</dimen>
     <dimen name="weather_update_text_size">12sp</dimen>
 </resources>

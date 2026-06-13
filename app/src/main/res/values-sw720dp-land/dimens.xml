@@ -3,28 +3,30 @@
     <!-- Large tier: For 10+ inch tablets like Sony Xperia -->
     <dimen name="clock_padding">24dp</dimen>
     <dimen name="sensor_card_padding">16dp</dimen>
-    <dimen name="sensor_text_size">46sp</dimen>
+    <dimen name="sensor_text_size">55sp</dimen>
     <dimen name="location_text_size">26sp</dimen>
-    <dimen name="date_text_size">50sp</dimen>
+    <dimen name="date_text_size">60sp</dimen>
     <dimen name="clock_text_size">160sp</dimen>
     <dimen name="sensor_divider_height">24dp</dimen>
 
     <dimen name="weather_header_margin_bottom">32dp</dimen>
     <dimen name="weather_icon_size">192dp</dimen>
-    <dimen name="weather_temp_text_size">112sp</dimen>
+    <dimen name="weather_temp_text_size">75sp</dimen>
     <dimen name="weather_condition_text_size">32sp</dimen>
     <dimen name="weather_details_card_margin_top">32dp</dimen>
     <dimen name="weather_details_card_padding">24dp</dimen>
     <dimen name="weather_detail_label_text_size">12sp</dimen>
-    <dimen name="weather_detail_value_text_size">28sp</dimen>
+    <dimen name="weather_detail_value_text_size">41sp</dimen>
+    <dimen name="weather_detail_temp_text_size">75sp</dimen>
     <dimen name="weather_location_text_size">32sp</dimen>
 
     <!-- Today Weather specific (larger) -->
-    <dimen name="today_weather_temp_text_size">170sp</dimen>
-    <dimen name="today_weather_condition_text_size">41sp</dimen>
+    <dimen name="today_weather_temp_text_size">204sp</dimen>
+    <dimen name="today_weather_condition_text_size">49sp</dimen>
     <dimen name="today_weather_detail_label_text_size">19sp</dimen>
-    <dimen name="today_weather_detail_value_text_size">40sp</dimen>
+    <dimen name="today_weather_detail_value_text_size">48sp</dimen>
     <dimen name="today_weather_location_text_size">34sp</dimen>
+    <dimen name="today_weather_clock_text_size">31sp</dimen>
     <dimen name="today_weather_icon_size">288dp</dimen>
     <dimen name="weather_update_text_size">14sp</dimen>
 </resources>
