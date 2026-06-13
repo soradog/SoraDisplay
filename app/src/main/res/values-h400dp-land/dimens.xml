@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="clock_padding">16dp</dimen>
+    <dimen name="sensor_card_padding">12dp</dimen>
+    <dimen name="sensor_text_size">24sp</dimen>
+    <dimen name="location_text_size">14sp</dimen>
+    <dimen name="date_text_size">28sp</dimen>
+    <dimen name="clock_text_size">100sp</dimen>
+    <dimen name="sensor_divider_height">18dp</dimen>
+
+    <dimen name="weather_header_margin_bottom">8dp</dimen>
+    <dimen name="weather_icon_size">120dp</dimen>
+    <dimen name="weather_temp_text_size">80sp</dimen>
+    <dimen name="weather_condition_text_size">20sp</dimen>
+    <dimen name="weather_details_card_margin_top">8dp</dimen>
+    <dimen name="weather_details_card_padding">12dp</dimen>
+    <dimen name="weather_detail_label_text_size">10sp</dimen>
+    <dimen name="weather_detail_value_text_size">20sp</dimen>
+    <dimen name="weather_location_text_size">24sp</dimen>
+</resources>
