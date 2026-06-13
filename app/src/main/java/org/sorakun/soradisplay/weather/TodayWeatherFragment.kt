@@ -95,5 +95,18 @@ open class TodayWeatherFragment() : Fragment() {
             "%d",
             currentConditions.windspeed.toInt()
         )
+
+        val days = record.getForecastedDays()
+        if (days.isNotEmpty()) {
+            val today = days[0]
+            binding.todayMaxTemp.text = Util.printF("%d°", today.tempmax.toInt())
+            binding.todayMaxTemp.setTextColor(Util.getTemperatureColor(today.tempmax))
+            binding.todayMinTemp.text = Util.printF("%d°", today.tempmin.toInt())
+            binding.todayMinTemp.setTextColor(Util.getTemperatureColor(today.tempmin))
+
+            binding.label4.text = "Rain:"
+            binding.value4.text = Util.printF("%d%%", today.precipprob.toInt())
+            binding.value4.setTextColor(Util.getChanceOfRainColor(today.precipprob))
+        }
     }
 }

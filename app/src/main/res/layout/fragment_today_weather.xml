@@ -52,23 +52,58 @@
         android:id="@+id/tempContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/currentIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/currentIcon"
         app:layout_constraintTop_toTopOf="@+id/currentIcon">
 
-        <TextView
-            android:id="@+id/temperature"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/today_weather_temp_text_size"
-            android:textStyle="bold"
-            tools:text="22°" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/today_weather_temp_text_size"
+                android:textStyle="bold"
+                tools:text="22°" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/todayMaxTemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/weather_temp_text_size"
+                    android:textStyle="bold"
+                    tools:text="25°" />
+
+                <TextView
+                    android:id="@+id/todayMinTemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/weather_detail_temp_text_size"
+                    tools:text="18°" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/condition"
@@ -195,6 +230,40 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/today_weather_detail_value_text_size"
                 tools:text="12km/h" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:alpha="0.2"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/label4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:text="@string/generic_rain_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/today_weather_detail_label_text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/value4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/today_weather_detail_value_text_size"
+                tools:text="10%" />
         </LinearLayout>
 
     </LinearLayout>
