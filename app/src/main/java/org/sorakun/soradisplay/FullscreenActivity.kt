@@ -23,6 +23,9 @@ import java.util.*
  */
 class FullscreenActivity : AppCompatActivity() {
 
+    private val deviceViewModel by viewModels<DeviceRecordViewModel>()
+    private val forecastViewModel by viewModels<ForecastRecordViewModel>()
+
     private lateinit var binding: ActivityFullscreenBinding
     private val hideHandler = Handler(Looper.myLooper()!!)
     private val flipPageHandler = Handler(Looper.myLooper()!!)
@@ -44,7 +47,7 @@ class FullscreenActivity : AppCompatActivity() {
             currentPage = 0
         }
         // only auto turn to the weather pages if weather api is running
-        if (forecastRunnable != null && forecastRunnable.isRunning) {
+        if (::forecastRunnable.isInitialized && forecastRunnable.isRunning) {
             binding.fullscreenContent.setCurrentItem(currentPage++, false)
         }
     }
@@ -136,21 +139,25 @@ class FullscreenActivity : AppCompatActivity() {
 
     private fun setupNatureRemoRestApiRunnable() {
         Log.i("SoraDisplay", "FullscreenActivity:setupNatureRemoRestApiRunnable")
-        val viewModel by viewModels<DeviceRecordViewModel>()
-        devicesRunnable = DevicesRequestRunnable(this, viewModel)
+        if (::devicesRunnable.isInitialized) {
+            devicesRunnable.pause()
+        }
+        devicesRunnable = DevicesRequestRunnable(this, deviceViewModel)
         devicesRunnable.firstRun()
     }
     private fun setupWeatherRestApiRunnable() {
         Log.i("SoraDisplay", "FullscreenActivity:setupWeatherRestApiRunnable")
-        val viewModel by viewModels<ForecastRecordViewModel>()
-        forecastRunnable = ServiceFactory.requestRunnable(this, viewModel)
+        if (::forecastRunnable.isInitialized) {
+            forecastRunnable.pause()
+        }
+        forecastRunnable = ServiceFactory.requestRunnable(this, forecastViewModel)
         forecastRunnable.firstRun()
     }
 
     private val preferenceListener =
         SharedPreferences.OnSharedPreferenceChangeListener { pref, tag ->
             Log.i("SoraDisplay", "FullscreenActivity:OnSharedPreferenceChangeListener")
-            if (pref != null) {
+            if (pref != null && tag != null) {
                 if (tag.contains("natureremo", false)) {
                     setupNatureRemoRestApiRunnable()
                 }
@@ -182,12 +189,21 @@ class FullscreenActivity : AppCompatActivity() {
     override fun onPause() {
         Log.i("SoraDisplay", "FullscreenActivity:onPause")
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        sharedPref.registerOnSharedPreferenceChangeListener(preferenceListener)
+        sharedPref.unregisterOnSharedPreferenceChangeListener(preferenceListener)
         flipPageHandler.removeCallbacks(flipPagerRunnable)
         timer.cancel()
-        forecastRunnable.pause()
-        devicesRunnable.pause()
+        if (::forecastRunnable.isInitialized) {
+            forecastRunnable.pause()
+        }
+        if (::devicesRunnable.isInitialized) {
+            devicesRunnable.pause()
+        }
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(systemBroadcastReceiver)
     }
 
     private fun disableScreenSleep(chargingOrDocking : Boolean) {
