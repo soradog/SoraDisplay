@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
 }
@@ -22,8 +21,9 @@ android {
         minSdk 16
         targetSdk 33
         // Auto-increment versionCode based on minutes since Jan 1, 2026
-        versionCode ((System.currentTimeMillis() - 1767225600000L) / 60000).toInteger()
-        versionName "1.0." + versionCode
+        def computedVersionCode = ((System.currentTimeMillis() - 1767225600000L) / 60000).toInteger()
+        versionCode computedVersionCode
+        versionName "1.0.$computedVersionCode"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
