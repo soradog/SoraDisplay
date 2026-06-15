@@ -21,8 +21,9 @@ android {
         applicationId "org.sorakun.soradisplay"
         minSdk 16
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        // Auto-increment versionCode based on minutes since Jan 1, 2026
+        versionCode ((System.currentTimeMillis() - 1767225600000L) / 60000).toInteger()
+        versionName "1.0." + versionCode
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
