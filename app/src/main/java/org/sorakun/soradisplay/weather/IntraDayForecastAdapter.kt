@@ -39,9 +39,12 @@ class IntraDayForecastAdapter :
             context = view.context
         }
 
+        companion object {
+            private val printer = SimpleDateFormat("HH:mm")
+            private val parser = SimpleDateFormat("HH:mm:ss")
+        }
+
         fun bind(hour : ForecastRecordBase.DayBase.HourBase) {
-            val printer = SimpleDateFormat("HH:mm")
-            val parser = SimpleDateFormat("HH:mm:ss")
             try {
                 datetime.text = parser.parse(hour.datetime)?.let { printer.format(it) }
             } catch (e: ParseException) {
