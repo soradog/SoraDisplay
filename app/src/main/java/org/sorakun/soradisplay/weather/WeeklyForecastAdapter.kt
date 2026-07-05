@@ -17,7 +17,10 @@ import java.text.SimpleDateFormat
 class WeeklyForecastAdapter () :
     ListAdapter<ForecastRecordBase.DayBase, WeeklyForecastAdapter.ViewHolder>(ForecastDayDiffCallback) {
 
-    class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+    private val printer = SimpleDateFormat("dd (EE)")
+    private val parser = SimpleDateFormat("yyyy-MM-dd")
+
+    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val date : TextView
         private val icon : ImageView
         private val data1 : TextView
@@ -37,8 +40,6 @@ class WeeklyForecastAdapter () :
         }
 
         fun bind(fd : ForecastRecordBase.DayBase) {
-            val printer = SimpleDateFormat("dd (EE)")
-            val parser = SimpleDateFormat("yyyy-MM-dd")
             try {
                 date.text = parser.parse(fd.datetime)?.let { printer.format(it) }
             } catch (e: ParseException) {
