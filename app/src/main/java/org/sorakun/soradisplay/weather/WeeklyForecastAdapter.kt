@@ -17,7 +17,10 @@ import java.text.SimpleDateFormat
 class WeeklyForecastAdapter () :
     ListAdapter<ForecastRecordBase.DayBase, WeeklyForecastAdapter.ViewHolder>(ForecastDayDiffCallback) {
 
-    class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+    private val printer = SimpleDateFormat("dd (EE)")
+    private val parser = SimpleDateFormat("yyyy-MM-dd")
+
+    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val date : TextView
         private val icon : ImageView
         private val data1 : TextView
@@ -36,14 +39,9 @@ class WeeklyForecastAdapter () :
             iconV3 = view.findViewById(R.id.weather_icon_v3)
         }
 
-        companion object {
-            private val printer = SimpleDateFormat("dd (EE)")
-            private val parser = SimpleDateFormat("yyyy-MM-dd")
-        }
-
         fun bind(fd : ForecastRecordBase.DayBase) {
             try {
-                date.text = parser.parse(fd.datetime)?.let { printer.format(it) }
+                date.text = this@WeeklyForecastAdapter.parser.parse(fd.datetime)?.let { this@WeeklyForecastAdapter.printer.format(it) }
             } catch (e: ParseException) {
                 Log.e("SoraDisplay", "WeeklyForecastAdapter: Unable to parse ${fd.datetime}")
             }
