@@ -41,7 +41,7 @@ class WeeklyForecastAdapter () :
 
         fun bind(fd : ForecastRecordBase.DayBase) {
             try {
-                date.text = parser.parse(fd.datetime)?.let { printer.format(it) }
+                date.text = this@WeeklyForecastAdapter.parser.parse(fd.datetime)?.let { this@WeeklyForecastAdapter.printer.format(it) }
             } catch (e: ParseException) {
                 Log.e("SoraDisplay", "WeeklyForecastAdapter: Unable to parse ${fd.datetime}")
             }
