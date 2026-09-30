@@ -18,7 +18,10 @@ import java.text.SimpleDateFormat
 class IntraDayForecastAdapter :
     ListAdapter<ForecastRecordBase.DayBase.HourBase, IntraDayForecastAdapter.ViewHolder>(HourDiffCallback) {
 
-    class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+    private val printer = SimpleDateFormat("HH:mm")
+    private val parser = SimpleDateFormat("HH:mm:ss")
+
+    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val datetime : TextView
         private val icon : ImageView
         private val data1 : TextView
@@ -40,10 +43,8 @@ class IntraDayForecastAdapter :
         }
 
         fun bind(hour : ForecastRecordBase.DayBase.HourBase) {
-            val printer = SimpleDateFormat("HH:mm")
-            val parser = SimpleDateFormat("HH:mm:ss")
             try {
-                datetime.text = parser.parse(hour.datetime)?.let { printer.format(it) }
+                datetime.text = this@IntraDayForecastAdapter.parser.parse(hour.datetime)?.let { this@IntraDayForecastAdapter.printer.format(it) }
             } catch (e: ParseException) {
                 Log.e("SoraDisplay", "IntraDayForecastAdapter:Unable to parse date: " + hour.datetime)
             }
