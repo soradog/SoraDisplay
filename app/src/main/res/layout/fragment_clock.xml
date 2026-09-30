@@ -94,6 +94,7 @@
         android:gravity="center"
         android:layerType="software"
         android:textColor="@color/white"
+        android:textSize="@dimen/clock_text_size"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="300sp"
         app:autoSizeMinTextSize="10sp"
