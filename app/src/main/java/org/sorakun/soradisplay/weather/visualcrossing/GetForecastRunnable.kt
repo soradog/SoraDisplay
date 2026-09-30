@@ -2,13 +2,12 @@ package org.sorakun.soradisplay.weather.visualcrossing
 
 import android.content.Context
 import android.util.Log
-import androidx.preference.PreferenceManager
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.JsonRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONObject
+import org.sorakun.soradisplay.VolleySingleton
 import org.sorakun.soradisplay.weather.ForecastRecordViewModel
 import org.sorakun.soradisplay.weather.GetForecastRunnableBase
 import java.lang.Exception
@@ -16,8 +15,7 @@ import java.lang.Exception
 class GetForecastRunnable (context: Context, viewModel: ForecastRecordViewModel) : Runnable,
     GetForecastRunnableBase(context, viewModel) {
 
-    private val requestQueue = Volley.newRequestQueue(context)
-    private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+    //private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
     private var responseCount : Int = 0
 
     override fun sendRequest() {
@@ -25,7 +23,7 @@ class GetForecastRunnable (context: Context, viewModel: ForecastRecordViewModel)
         //val url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/$location?unitGroup=metric&key=$apiKey&contentType=json"
         //val url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/$location?unitGroup=metric&key=HVGWEGYKE6JRT3G57Z4FVVEGZ&contentType=json"
             //"http://api.weatherapi.com/v1/forecast.json?key=5f4e6392424947e58a2135620230605&q=Tokyo&days=10&aqi=no&alerts=no"
-        var url = "http://$server:7000/weather"
+        val url = "http://$server:7000/weather"
         Log.i("SoraDisplay", "GetForecastRunnable:sendRequest $url")
 
         //creating json request for the NatureRemo sensor
@@ -43,7 +41,7 @@ class GetForecastRunnable (context: Context, viewModel: ForecastRecordViewModel)
                 error
             )
         }
-        requestQueue.add(request)
+        VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
     private fun onErrorResponse(error: VolleyError?) {

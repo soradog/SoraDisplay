@@ -2,18 +2,18 @@ package org.sorakun.soradisplay.natureremo
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONArray
+import org.sorakun.soradisplay.VolleySingleton
 
-class DevicesRequestRunnable(context: Context, private val viewModel: DeviceRecordViewModel) : Runnable,
+class DevicesRequestRunnable(private val context: Context, private val viewModel: DeviceRecordViewModel) : Runnable,
     Response.ErrorListener {
-    private val handler: Handler = Handler()
-    private val requestQueue = Volley.newRequestQueue(context)
+    private val handler: Handler = Handler(Looper.getMainLooper())
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
     private var responseCount : Int = 0
 
@@ -50,7 +50,7 @@ class DevicesRequestRunnable(context: Context, private val viewModel: DeviceReco
             this
         ) {
         }
-        requestQueue.add(request)
+        VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
     fun onResponseJSONArray(response: JSONArray?) {

@@ -2,11 +2,12 @@ package org.sorakun.soradisplay.weather
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import androidx.preference.PreferenceManager
 import org.json.JSONArray
 
-open class GetForecastRunnableBase(context: Context, val viewModel: ForecastRecordViewModel) : Runnable {
-    private val handler: Handler = Handler()
+open class GetForecastRunnableBase(val context: Context, val viewModel: ForecastRecordViewModel) : Runnable {
+    private val handler: Handler = Handler(Looper.getMainLooper())
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
 
     fun firstRun() {
